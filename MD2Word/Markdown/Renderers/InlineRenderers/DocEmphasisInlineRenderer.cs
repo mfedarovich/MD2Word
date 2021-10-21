@@ -12,9 +12,10 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
 
         protected override void Write(DocRenderer renderer, EmphasisInline obj)
         {
-            Document.AddNewBlock("InfoBlue");
+            Document.PushStyle("InfoBlue");
             Document.WriteText("<!-EmphasisInline-->" + Environment.NewLine);
-     
+            Document.PopStyle();
+
             var emphasisText = new string(obj.DelimiterChar, obj.DelimiterCount);
             renderer.Write(emphasisText);
             renderer.WriteChildren(obj);

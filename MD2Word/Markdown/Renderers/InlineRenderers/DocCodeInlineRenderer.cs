@@ -1,6 +1,4 @@
-﻿using System;
-using Markdig.Renderers.Roundtrip;
-using Markdig.Syntax.Inlines;
+﻿using Markdig.Syntax.Inlines;
 
 namespace MD2Word.Markdown.Renderers.InlineRenderers
 {
@@ -12,16 +10,13 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
 
         protected override void Write(DocRenderer renderer, CodeInline obj)
         {
-            Document.AddNewBlock("InfoBlue");
-            Document.WriteText("<!-CodeInline-->" + Environment.NewLine);
-
-            var delimiterRun = new string(obj.Delimiter, obj.DelimiterCount);
-            renderer.Write(delimiterRun);
+            Document.PushStyle("Code Text", true);
             if (obj.Content is { Length: > 0 })
             {
                 renderer.Write(obj.ContentWithTrivia);
             }
-            renderer.Write(delimiterRun);
+
+            Document.PopStyle();
         }
     }
 }

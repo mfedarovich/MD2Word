@@ -13,7 +13,6 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, BriefBlock obj)
         {
-            Document.AddNewBlock("Body Text");
             var text = obj.Lines.ToSlice().ToString();
             Document.WriteText(text);
         }

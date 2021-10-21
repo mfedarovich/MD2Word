@@ -39,6 +39,8 @@ namespace MD2Word.Markdown.Renderers
             ObjectRenderers.Add(new DocRoundtripHtmlEntityInlineRenderer(document));            
             ObjectRenderers.Add(new DocLinkInlineRenderer(document));
             ObjectRenderers.Add(new DocLiteralInlineRenderer(document));
+            
+            Writer.NewLine = Environment.NewLine;
         }
 
         public void RenderLinesBefore(Block block)

@@ -12,9 +12,10 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
         
         protected override void Write(DocRenderer renderer, LinkInline link)
         {
-            Document.AddNewBlock("InfoBlue");
+            Document.PushStyle("InfoBlue");
             Document.WriteText("<!-LinkInline-->" + Environment.NewLine);
-
+            Document.PopStyle();
+            
             if (link.IsImage)
             {
                 renderer.Write('!');

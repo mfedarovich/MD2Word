@@ -18,9 +18,12 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, CodeBlock obj)
         {
-            Document.AddNewBlock("Code");
+            Document.PushStyle("Code");
             var text = obj.Lines.ToSlice().ToString();
             Document.WriteText(text);
+            
+            Document.PopStyle();
+
             // foreach (var line in obj.CodeBlockLines)
             // {
             //     Document.WriteText(line.TriviaBefore.ToString());

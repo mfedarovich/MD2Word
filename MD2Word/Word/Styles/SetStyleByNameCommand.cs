@@ -2,26 +2,14 @@
 using System.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
-using MD2Word.Commands;
 
 namespace MD2Word.Word.Styles
 {
-    public class SetStyleCommand : ICommand
+    public class SetStyleByNameCommand : SetStyleByIdCommand
     {
-        private readonly WordprocessingDocument _document;
-        private readonly Paragraph _paragraph;
-        private readonly string _styleName;
-
-        public SetStyleCommand(WordprocessingDocument document, Paragraph paragraph, string styleName)
+        public SetStyleByNameCommand(WordprocessingDocument document, Paragraph paragraph, string styleName) :
+            base (document, paragraph, GetStyleIdFromStyleName(document, styleName))
         {
-            _document = document;
-            _paragraph = paragraph;
-            _styleName = styleName;
-        }
-        public void Execute()
-        {
-            var styleId = GetStyleIdFromStyleName(_document, _styleName);
-            ApplyStyleToParagraph(styleId);
         }
         
         public static string GetStyleIdFromStyleName(WordprocessingDocument doc, string styleName)
@@ -41,14 +29,6 @@ namespace MD2Word.Word.Styles
                 throw new Exception($"Style \"{styleName}\" is not found");
             
             return styleId;
-        }
-
-        
-        private void ApplyStyleToParagraph(string styleId)
-        {
-            var pPr = _paragraph.Elements<ParagraphProperties>().FirstOrDefault() ?? 
-                      _paragraph.PrependChild(new ParagraphProperties());
-            pPr.ParagraphStyleId = new ParagraphStyleId(){Val = styleId};
         }
     }
 }
