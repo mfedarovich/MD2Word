@@ -32,6 +32,7 @@ namespace MD2Word
         
         public void WriteText(string text)
         {
+            if(_paragraph == null) AddNewBlock("Body Text");
             var run = _paragraph.AppendChild(new Run());
             run.AppendChild(new Text(text));
         }
