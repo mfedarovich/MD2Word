@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using System.Text;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -34,7 +35,30 @@ namespace MD2Word
             var run = _paragraph.AppendChild(new Run());
             run.AppendChild(new Text(text));
         }
-        
+
+        public void WriteHtml(string html)
+        {
+            _paragraph = CreateParagraphAfter(_paragraph);
+            string altChunkId = $"codeId_{html.GetHashCode()}";
+            // var run = new Run(new Text("test"));
+            // var p = new Paragraph(new ParagraphProperties(
+            //         new Justification() { Val = JustificationValues.Center }),
+            //     run);
+
+            var ms = new MemoryStream(Encoding.UTF8.GetBytes(html));
+
+            // Create alternative format import part.
+            var formatImportPart = _doc.MainDocumentPart?.AddAlternativeFormatImportPart(
+                    AlternativeFormatImportPartType.Html, altChunkId);
+            //ms.Seek(0, SeekOrigin.Begin);
+
+            // Feed HTML data into format import part (chunk).
+            formatImportPart.FeedData(ms);
+            AltChunk altChunk = new AltChunk();
+            altChunk.Id = altChunkId;
+            _paragraph.Append(altChunk);
+        }
+
         private Paragraph CreateParagraphAfter(OpenXmlElement? element)
         {
             bool removePlaceholder = false;

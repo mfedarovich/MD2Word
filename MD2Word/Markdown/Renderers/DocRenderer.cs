@@ -4,6 +4,7 @@ using System.Text;
 using Markdig.Helpers;
 using Markdig.Renderers;
 using Markdig.Renderers.Html;
+using Markdig.Renderers.Html.Inlines;
 using Markdig.Syntax;
 using MD2Word.Markdown.Renderers.ObjectRenderers;
 
@@ -22,17 +23,19 @@ namespace MD2Word.Markdown.Renderers
         {
             _document = document ?? throw new ArgumentNullException(nameof(document));
             // Default block renderers
-            // ObjectRenderers.Add(new CodeBlockRenderer());
-            // ObjectRenderers.Add(new ListRenderer());
+            ObjectRenderers.Add(new DocCodeBlockRenderer(document));
+            ObjectRenderers.Add(new DocBriefRenderer(document));
+            ObjectRenderers.Add(new DocPlantUmlRenderer(document));
+            //ObjectRenderers.Add(new UniRenderer<ListBlock>(document, "List Number"));//(new ListRenderer());
             ObjectRenderers.Add(new DocHeadingStyleRenderer(document));
             // ObjectRenderers.Add(new HtmlBlockRenderer());
-            // ObjectRenderers.Add(new ParagraphRenderer());
-            // ObjectRenderers.Add(new QuoteBlockRenderer());
-            // ObjectRenderers.Add(new ThematicBreakRenderer());
+            ObjectRenderers.Add(new UniRenderer<ParagraphBlock>(document, "List Paragraph"));//(new ParagraphRenderer());
+           // ObjectRenderers.Add(new UniRenderer<QuoteBlock>(document, "Body Text"));//(new QuoteBlockRenderer());
+            //ObjectRenderers.Add(new ThematicBreakRenderer());
             //
             // // Default inline renderers
             // ObjectRenderers.Add(new AutolinkInlineRenderer());
-            // ObjectRenderers.Add(new CodeInlineRenderer());
+            ObjectRenderers.Add(new CodeInlineRenderer());
             // ObjectRenderers.Add(new DelimiterInlineRenderer());
             // ObjectRenderers.Add(new EmphasisInlineRenderer());
             // ObjectRenderers.Add(new LineBreakInlineRenderer());
@@ -287,7 +290,7 @@ namespace MD2Word.Markdown.Renderers
         public DocRenderer WriteLeafRawLines(LeafBlock leafBlock, bool writeEndOfLines)
         {
             if (leafBlock is null) throw new ArgumentNullException(nameof(leafBlock));
-            if (leafBlock.Lines.Lines != null)
+            if (leafBlock?.Lines.Lines != null)
             {
                 var lines = leafBlock.Lines;
                 var slices = lines.Lines;
@@ -305,6 +308,6 @@ namespace MD2Word.Markdown.Renderers
                 }
             }
             return this;
-        }
+        } 
     }
 }

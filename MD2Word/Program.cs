@@ -3,6 +3,8 @@ using System.IO;
 using System.Linq;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using Markdig;
+using MD2Word.Markdown.Parsers;
 using MD2Word.Markdown.Renderers;
 using MD2Word.Word.Commands;
 using MD2Word.Word.Styles;
@@ -33,7 +35,11 @@ namespace MD2Word
                 var mdFile =
                     @"d:\Projects\Tecan\Improvements\Documentation\Markdown\MD2Word\MD2Word\bin\Debug\netcoreapp3.1\Graph.md";
                 var mdContent = File.ReadAllText(mdFile);
-                Markdig.Markdown.Convert(mdContent, new DocRenderer(new Document(doc)));
+                var pipelineBuilder = new MarkdownPipelineBuilder();
+                pipelineBuilder.EnableTrackTrivia();
+                pipelineBuilder.BlockParsers.Add(new BriefBlockParser());
+                MarkdownPipeline pipeline = pipelineBuilder.Build();
+                Markdig.Markdown.Convert(mdContent, new DocRenderer(new Document(doc)), pipeline);
                 var updateField = new UpdateFieldsOnOpenCommand(doc);
                 updateField.Execute();
             }

@@ -7,5 +7,6 @@ namespace MD2Word
         TextWriter GetWriter();
         void AddNewBlock(string style);
         void WriteText(string text);
+        void WriteHtml(string html);
     }
 }
