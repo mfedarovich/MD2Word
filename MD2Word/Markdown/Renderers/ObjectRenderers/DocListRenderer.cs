@@ -29,11 +29,7 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
                 {
                     var item = listBlock[i];
                     var listItem = (ListItemBlock) item;
-                    if (listItem.Count == 0)
-                    {
-                        renderer.Write(""); // trigger writing of indent
-                    }
-                    else
+                    if (listItem.Count != 0)
                     {
                         renderer.WriteChildren(listItem);
                     }

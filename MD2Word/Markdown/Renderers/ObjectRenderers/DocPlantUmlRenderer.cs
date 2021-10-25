@@ -10,7 +10,7 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, PlantUmlBlock obj)
         {
-            renderer.WriteLine("[plant uml here]");
+            Document.WriteText("[plant uml here]");
         }
     }
 }

@@ -48,9 +48,7 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
                 }
             }
 
-            renderer.PushIndent(indents);
             renderer.WriteChildren(quoteBlock);
-            renderer.PopIndent();
 
             if (!noChildren)
             {

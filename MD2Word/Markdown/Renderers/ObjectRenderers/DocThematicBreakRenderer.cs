@@ -13,7 +13,6 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
             renderer.RenderLinesBefore(obj);
 
             renderer.Write(obj.Content);
-            renderer.WriteLine(obj.NewLine);
             renderer.RenderLinesAfter(obj);
         }
     }
