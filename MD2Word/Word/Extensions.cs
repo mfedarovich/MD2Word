@@ -21,10 +21,19 @@ namespace MD2Word.Word
             {
                 //var type = forParagraph ? StyleValues.Paragraph : StyleValues.Character;
                 var type = StyleValues.Paragraph;
-                styleId = stylePart.Styles.Descendants<StyleName>()
+                var style = stylePart.Styles.Descendants<StyleName>()
                     .Where(s => string.Compare(s.Val?.Value, styleName, StringComparison.OrdinalIgnoreCase) == 0  &&
                                 ((Style) s.Parent!)?.Type == type)
-                    .Select(n => ((Style) n.Parent!)?.StyleId).FirstOrDefault();
+                    .Select(n => ((Style) n.Parent!)).FirstOrDefault();
+
+                if (!forParagraph && style?.LinkedStyle != null)
+                {
+                    styleId = style.LinkedStyle.Val.Value;
+                }
+                else
+                {
+                    styleId = style?.StyleId;
+                }
             }
 
             var array = stylePart.Styles.Descendants<StyleName>().Where(s =>
