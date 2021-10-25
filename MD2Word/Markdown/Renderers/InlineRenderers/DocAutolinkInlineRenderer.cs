@@ -12,8 +12,8 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
         }
         protected override void Write(DocRenderer renderer, AutolinkInline obj)
         {
-            Document.PushStyle("InfoBlue");
-            Document.WriteText("<!-AutolinkInline-->" + Environment.NewLine);
+            Document.PushStyle("InfoBlue", true);
+            Document.WriteInlineText("<!-AutolinkInline-->" + Environment.NewLine);
             Document.PopStyle();
 
             Document.WriteText(obj.Url);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using System.Text;
 using Markdig.Helpers;
 using Markdig.Renderers;
 using Markdig.Syntax;
@@ -105,22 +106,23 @@ namespace MD2Word.Markdown.Renderers
         {
             _document.WriteText(content!);
         }
+
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Write(StringSlice slice)
+        public void Write(StringSlice slice, bool inline = false)
         {
-            Write(ref slice);
+            Write(ref slice, inline);
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Write(ref StringSlice slice)
+        public void Write(ref StringSlice slice, bool inline = false)
         {
             if (slice.Start > slice.End)
             {
                 return;
             }
-            Write(slice.Text, slice.Start, slice.Length);
+            Write(slice.Text, slice.Start, slice.Length, inline);
         }
         
-        public void Write(string content, int offset, int length)
+        public void Write(string content, int offset, int length, bool inline = false)
         {
             if (content is null)
             {
@@ -130,23 +132,25 @@ namespace MD2Word.Markdown.Renderers
 #if NETCORE
             Writer.Write(content.AsSpan(offset, length));
 #else
-            if (offset == 0 && content.Length == length)
-            {
-                _document.WriteText(content);
-            }
-            else
+            if (offset != 0 || content.Length != length)
             {
                 if (length > _buffer.Length)
                 {
                     _buffer = content.ToCharArray();
-                    _document.GetWriter().Write(_buffer, offset, length);
                 }
                 else
                 {
                     content.CopyTo(offset, _buffer, 0, length);
-                    _document.GetWriter().Write(_buffer, 0, length);
+                    offset = 0;
                 }
+                
+                content = new string(_buffer, offset, length);
             }
+
+            if (inline)
+                _document.WriteInlineText(content);
+            else
+                _document.WriteText(content);
 #endif
         }
         

@@ -9,6 +9,7 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
         }
         protected override void Write(DocRenderer renderer, ParagraphBlock paragraph)
         {
+            Document.StartNextParagraph();
             renderer.WriteLeafInline(paragraph);
         }
     }

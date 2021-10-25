@@ -14,9 +14,11 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
         protected override void Write(DocRenderer renderer, HeadingBlock obj)
         {
             var style = string.Format(StylePattern, Math.Min(MaxHeadingNumber, obj.Level));
-            
             Document.PushStyle(style);
+      
+            Document.StartNextParagraph();
             renderer.WriteLeafInline(obj);
+            
             Document.PopStyle();
         }
     }

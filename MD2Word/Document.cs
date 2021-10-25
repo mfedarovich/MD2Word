@@ -6,7 +6,7 @@ using System.Text;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
-using MD2Word.Word.Styles;
+using MD2Word.Word;
 
 namespace MD2Word
 {
@@ -14,12 +14,23 @@ namespace MD2Word
     {
         private readonly Stack<Tuple<string, bool>> _stack = new Stack<Tuple<string, bool>>();
         private readonly WordprocessingDocument _doc;
-        private Paragraph _lastParagraph;
+        private Paragraph _paragraph;
 
         public Document(WordprocessingDocument doc)
         {
             _doc = doc;
             _stack.Push(new Tuple<string, bool>("Body Text", false)); ;
+        }
+
+        public void StartNextParagraph()
+        {
+            _paragraph = CreateParagraphAfter(_paragraph);
+            var styleName = Style;
+            if (Inline)
+                styleName = _stack.AsEnumerable().Reverse().FirstOrDefault(x => !x.Item2)?.Item1;
+
+            if (styleName != null)
+                _paragraph.ApplyStyleId(_doc.FindStyleIdByName(styleName));
         }
 
         public TextWriter GetWriter()
@@ -41,37 +52,33 @@ namespace MD2Word
         
         public void WriteText(string text)
         {
-            if (!Inline)
-            {
-                _lastParagraph = CreateParagraphAfter(_lastParagraph);
-                if (!string.IsNullOrEmpty(Style)) ApplyStyleName(Style);
-            }
-
-            var run = _lastParagraph.AppendChild(new Run());
-            if (Inline && _stack.Any())
-            {
-                var lastStyle = Style;
-                var styleId = SetStyleByNameCommand.GetStyleIdFromStyleName(_doc, lastStyle);
-                var pPr = run.Elements<RunProperties>().FirstOrDefault() ?? 
-                          run.PrependChild(new RunProperties());
-                pPr.RunStyle = new RunStyle(){Val = styleId};
-            }
-
+            var run = _paragraph.AppendChild(new Run());
+  
             if (text == Environment.NewLine)
                 run.AppendChild(new Break());
             else
             {
                 var newChild = new Text(text);
-                if (Inline)
-                    newChild.Space = new EnumValue<SpaceProcessingModeValues>(SpaceProcessingModeValues.Preserve);
-                
                 run.AppendChild(newChild);
             }
         }
 
+        public void WriteInlineText(string text)
+        {
+            var run = _paragraph.AppendChild(new Run());
+            if (Inline)
+            {
+                run.ApplyStyleId(_doc.FindStyleIdByName(Style, false));
+            }
+            
+            var newChild = new Text(text);
+            newChild.Space = new EnumValue<SpaceProcessingModeValues>(SpaceProcessingModeValues.Preserve);
+            run.AppendChild(newChild);
+        }
+
         public void WriteHtml(string html)
         {
-            _lastParagraph = CreateParagraphAfter(_lastParagraph);
+            _paragraph = CreateParagraphAfter(_paragraph);
             string altChunkId = $"codeId_{html.GetHashCode()}";
             // var run = new Run(new Text("test"));
             // var p = new Paragraph(new ParagraphProperties(
@@ -89,7 +96,7 @@ namespace MD2Word
             formatImportPart.FeedData(ms);
             AltChunk altChunk = new AltChunk();
             altChunk.Id = altChunkId;
-            _lastParagraph.Append(altChunk);
+            _paragraph.Append(altChunk);
         }
 
         public void PushStyle(string style, bool inline)
@@ -136,18 +143,5 @@ namespace MD2Word
 
             return element;
         }
-        
-        private void ApplyStyleName(string styleName)
-        {
-            var styleCommand = new SetStyleByNameCommand(_doc, _lastParagraph, styleName);
-            styleCommand.Execute();
-        }
-
-        private void ApplyStyleId(string styleId)
-        {
-            var styleCommand = new SetStyleByIdCommand(_doc, _lastParagraph, styleId);
-            styleCommand.Execute();
-        }
-
     }
 }

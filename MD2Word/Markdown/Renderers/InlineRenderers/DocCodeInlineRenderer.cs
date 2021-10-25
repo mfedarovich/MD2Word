@@ -13,7 +13,7 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
             Document.PushStyle("Code Text", true);
             if (obj.Content is { Length: > 0 })
             {
-                renderer.Write(obj.ContentWithTrivia);
+                renderer.Write(obj.ContentWithTrivia, true);
             }
 
             Document.PopStyle();

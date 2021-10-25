@@ -10,7 +10,7 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, LiteralInline obj)
         {
-            renderer.Write(ref obj.Content);
+            renderer.Write(ref obj.Content, true);
         }
     }
 }
