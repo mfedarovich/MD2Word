@@ -12,19 +12,13 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
         
         protected override void Write(DocRenderer renderer, LinkInline link)
         {
-            Document.PushStyle("InfoBlue");
-            Document.WriteText("<!-LinkInline-->" + Environment.NewLine);
-            Document.PopStyle();
-            
             if (link.IsImage)
             {
-                renderer.Write('!');
+                DrawImage(renderer, link);
+                return;
             }
-
             // link text
-            renderer.Write('[');
             renderer.WriteChildren(link);
-            renderer.Write(']');
 
             if (link.Label != null)
             {
@@ -76,6 +70,19 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
                     renderer.Write(')');
                 }
             }
+        }
+
+        private void DrawImage(DocRenderer renderer, LinkInline link)
+        {
+            Document.StartNextParagraph();
+            if (!string.IsNullOrEmpty(link.Title))
+            {
+                Document.PushStyle("Caption_style", true);
+                renderer.Write(link.UnescapedTitle);
+                Document.PopStyle();
+            }
+
+            Document.InsertImageFromFile(link.UnescapedUrl.ToString());
         }
     }
 }

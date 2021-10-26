@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using Markdig.Helpers;
 
 namespace MD2Word
 {
@@ -12,5 +13,7 @@ namespace MD2Word
         void PushStyle(string style, bool inline = false);
         void PopStyle();
         void InsertPngImage(byte[] buffer);
+        void InsertImageFromFile(string fileName);
+        void InsertUml(string umlScript);
     }
 }

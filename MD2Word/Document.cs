@@ -7,6 +7,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using MD2Word.Word;
+using PlantUml.Net;
 
 namespace MD2Word
 {
@@ -114,6 +115,22 @@ namespace MD2Word
         {
             _paragraph = CreateParagraphAfter(_paragraph);
             _image.AddImage(_paragraph, buffer);
+        }
+
+        public void InsertImageFromFile(string fileName)
+        {
+            if (Path.GetExtension(fileName) != ".png")
+                throw new FileFormatException("Only png files are supported");
+            
+            InsertPngImage(File.ReadAllBytes(fileName));
+        }
+
+        public void InsertUml(string umlScript)
+        {
+            var factory = new RendererFactory();
+            var plantUmlRenderer = factory.CreateRenderer(new PlantUmlSettings());
+            var buffer = plantUmlRenderer.Render(umlScript, OutputFormat.Png);
+            InsertPngImage(buffer);
         }
 
         private Paragraph CreateParagraphAfter(OpenXmlElement? element)
