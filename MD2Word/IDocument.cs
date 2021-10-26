@@ -11,5 +11,6 @@ namespace MD2Word
         void WriteHtml(string html);
         void PushStyle(string style, bool inline = false);
         void PopStyle();
+        void InsertPngImage(byte[] buffer);
     }
 }

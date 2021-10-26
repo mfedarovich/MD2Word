@@ -11,7 +11,7 @@ namespace MD2Word.Markdown.Parsers
         private const string PlanUmlStart = "startuml";
         private const string PlantUmlEnd = "enduml";
 
-        private Func<BlockProcessor, bool> CheckIfBlockEnded;
+        private Func<BlockProcessor, bool> _checkIfBlockEnded = processor => false;
         public ExtendedBlockParser()
         {
             OpeningCharacters = new[] {'@'};
@@ -34,15 +34,7 @@ namespace MD2Word.Markdown.Parsers
         }
         public override BlockState TryContinue(BlockProcessor processor, Block block)
         {
-            if (CheckIfBlockEnded(processor)) 
-                return BlockState.BreakDiscard;
-            
-            block.NewLine = processor.Line.NewLine;
-            block.UpdateSpanEnd(processor.Line.End);
-            (block as LeafBlock)?.AppendLine(ref processor.Line, processor.Column, processor.LineIndex,
-                processor.CurrentLineStartPosition, processor.TrackTrivia);
-            
-            return BlockState.Continue;
+            return _checkIfBlockEnded(processor) ? BlockState.BreakDiscard : BlockState.Continue;
         }
         
         private bool TryToCreateBlock<T>(BlockProcessor processor, string key, Func<BlockProcessor, bool> endBlockCheck) 
@@ -54,7 +46,7 @@ namespace MD2Word.Markdown.Parsers
             {
                 processor.Column = position + key.Length;
                 processor.NewBlocks.Push((T)Activator.CreateInstance(typeof(T), this)!);
-                CheckIfBlockEnded = endBlockCheck;
+                _checkIfBlockEnded = endBlockCheck;
                 return true;
             }
 

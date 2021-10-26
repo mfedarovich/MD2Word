@@ -15,11 +15,13 @@ namespace MD2Word
         private readonly Stack<Tuple<string, bool>> _stack = new Stack<Tuple<string, bool>>();
         private readonly WordprocessingDocument _doc;
         private Paragraph _paragraph;
+        private readonly EmbeddedImage _image;
 
         public Document(WordprocessingDocument doc)
         {
             _doc = doc;
-            _stack.Push(new Tuple<string, bool>("Body Text", false)); ;
+            _image = new EmbeddedImage(doc, 500);
+            _stack.Push(new Tuple<string, bool>("Body Text", false)); 
         }
 
         public void StartNextParagraph()
@@ -37,16 +39,7 @@ namespace MD2Word
         {
             return new DocumentWriter(this);
         }
-
-        // public void SetStyle(string style)
-        // {
-        //     _style = style;
-        //     // _paragraph = CreateParagraphAfter(_paragraph);
-        //     // if (style != null)
-        //     //     ApplyStyleName(style);
-        // }
-        //
-
+        
         private string Style => _stack.Peek().Item1;
         private bool Inline => _stack.Peek().Item2;
         
@@ -117,12 +110,18 @@ namespace MD2Word
         //     }
         }
 
+        public void InsertPngImage(byte[] buffer)
+        {
+            _paragraph = CreateParagraphAfter(_paragraph);
+            _image.AddImage(_paragraph, buffer);
+        }
+
         private Paragraph CreateParagraphAfter(OpenXmlElement? element)
         {
             bool removePlaceholder = false;
             if (element == null)
             {
-                element = FindBodyPlaceholder();
+                element = _doc.GetBodyPlaceholder();
                 removePlaceholder = true;
             }
 
@@ -131,17 +130,6 @@ namespace MD2Word
             if (removePlaceholder)
                 element.Remove();
             return paragraph;
-        }
-
-        private OpenXmlElement FindBodyPlaceholder()
-        {
-            // string contentControlTag;
-            var element = _doc.MainDocumentPart?.Document.Body?.Descendants<SdtElement>().FirstOrDefault();
-            // .FirstOrDefault(sdt => sdt.SdtProperties.GetFirstChild<Tag>()?.Val == contentControlTag);
-            if (element == null)
-                throw new ArgumentException($"Documentation body placeholder is not found.");
-
-            return element;
         }
     }
 }

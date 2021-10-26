@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 
@@ -7,6 +8,17 @@ namespace MD2Word.Word
 {
     public static class Extensions
     {
+        public static OpenXmlElement GetBodyPlaceholder(this WordprocessingDocument document)
+        {
+            // string contentControlTag;
+            var element = document.MainDocumentPart?.Document.Body?.Descendants<SdtElement>().FirstOrDefault();
+            // .FirstOrDefault(sdt => sdt.SdtProperties.GetFirstChild<Tag>()?.Val == contentControlTag);
+            if (element == null)
+                throw new ArgumentException($"Documentation body placeholder is not found.");
+
+            return element;
+        }
+
         public static void SetUpdateFieldsOnOpen(this WordprocessingDocument doc)
         {
             var settingsPart = doc.MainDocumentPart.DocumentSettingsPart;
