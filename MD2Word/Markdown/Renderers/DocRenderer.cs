@@ -53,33 +53,10 @@ namespace MD2Word.Markdown.Renderers
         public override object Render(MarkdownObject markdownObject)
         {
             Write(markdownObject);
-            return _document.GetWriter();
+            return _document;
         }
 
 
-        public void RenderLinesBefore(Block block)
-        {
-            // if (block.LinesBefore is null)
-            // {
-            //     return;
-            // }
-            // foreach (var line in block.LinesBefore)
-            // {
-            //     Write(line);
-            // }
-        }
-
-        public void RenderLinesAfter(Block block)
-        {
-            // if (block.LinesAfter is null)
-            // {
-            //     return;
-            // }
-            // foreach (var line in block.LinesAfter)
-            // {
-            //     Write(line);
-            // }
-        }
         public void WriteLeafRawLines(LeafBlock leafBlock)
         {
             if (leafBlock is null) throw  new ArgumentNullException(nameof(leafBlock));

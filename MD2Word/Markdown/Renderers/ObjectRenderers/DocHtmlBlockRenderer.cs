@@ -10,10 +10,8 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, HtmlBlock obj)
         {
-            renderer.RenderLinesBefore(obj);
             //renderer.Write(obj.BeforeWhitespace); // Lines content is written, including whitespace
             renderer.WriteLeafRawLines(obj);
-            renderer.RenderLinesAfter(obj);
         }
     }
 }

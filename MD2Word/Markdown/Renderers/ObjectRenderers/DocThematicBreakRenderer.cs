@@ -10,10 +10,7 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, ThematicBreakBlock obj)
         {
-            renderer.RenderLinesBefore(obj);
-
             renderer.Write(obj.Content);
-            renderer.RenderLinesAfter(obj);
         }
     }
 }

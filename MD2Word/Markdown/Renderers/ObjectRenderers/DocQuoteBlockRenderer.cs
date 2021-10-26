@@ -11,7 +11,6 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, QuoteBlock quoteBlock)
         {
-            renderer.RenderLinesBefore(quoteBlock);
             renderer.Write(quoteBlock.TriviaBefore);
 
             var indents = new string[quoteBlock.QuoteLines.Count];
@@ -49,11 +48,6 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
             }
 
             renderer.WriteChildren(quoteBlock);
-
-            if (!noChildren)
-            {
-                renderer.RenderLinesAfter(quoteBlock);
-            }
         }
     }
 }
