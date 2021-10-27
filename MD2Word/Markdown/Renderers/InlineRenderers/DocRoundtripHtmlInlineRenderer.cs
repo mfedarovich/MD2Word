@@ -10,7 +10,7 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
 
         protected override void Write(DocRenderer renderer, HtmlInline obj)
         {
-            renderer.Write(obj.Tag);
+            renderer.Write((string?) obj.Tag);
         }
     }
 }

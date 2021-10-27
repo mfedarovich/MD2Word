@@ -1,11 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Runtime.CompilerServices;
-using System.Text;
-using Markdig.Helpers;
-using Markdig.Parsers;
-using Markdig.Syntax;
+﻿using Markdig.Syntax;
 
 namespace MD2Word.Markdown.Renderers.ObjectRenderers
 {

@@ -1,5 +1,4 @@
 ﻿using System;
-using Markdig.Renderers.Roundtrip;
 using Markdig.Syntax.Inlines;
 
 namespace MD2Word.Markdown.Renderers.InlineRenderers
@@ -17,7 +16,7 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
             Document.WriteInlineText("<!-DelimiterInline-->" + Environment.NewLine);
             Document.PopStyle();
 
-            renderer.Write(obj.ToLiteral());
+            renderer.Write((string?) obj.ToLiteral());
             renderer.WriteChildren(obj);
         }
 

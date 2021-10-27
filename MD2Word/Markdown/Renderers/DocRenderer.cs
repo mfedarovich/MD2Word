@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
-using System.Text;
 using Markdig.Helpers;
 using Markdig.Renderers;
 using Markdig.Syntax;
 using MD2Word.Markdown.Renderers.InlineRenderers;
 using MD2Word.Markdown.Renderers.ObjectRenderers;
-
 using Inline = Markdig.Syntax.Inlines.Inline;
 
 namespace MD2Word.Markdown.Renderers

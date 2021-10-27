@@ -1,5 +1,4 @@
-﻿using Markdig.Helpers;
-using Markdig.Syntax;
+﻿using Markdig.Syntax;
 
 namespace MD2Word.Markdown.Renderers.ObjectRenderers
 {

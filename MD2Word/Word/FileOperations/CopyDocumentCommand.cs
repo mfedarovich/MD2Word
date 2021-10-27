@@ -1,10 +1,7 @@
 ﻿using System;
 using System.IO;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Wordprocessing;
-using MD2Word.Commands;
 
-namespace MD2Word.Word.Commands
+namespace MD2Word.Word.FileOperations
 {
     public class CopyDocumentCommand : ICommand
     {

@@ -1,7 +1,4 @@
-﻿using System.Linq;
-using System.Text;
-using Markdig.Helpers;
-using MD2Word.Markdown.Syntax;
+﻿using MD2Word.Markdown.Syntax;
 
 namespace MD2Word.Markdown.Renderers.ObjectRenderers
 {
