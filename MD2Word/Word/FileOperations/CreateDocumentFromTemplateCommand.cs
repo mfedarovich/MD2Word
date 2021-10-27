@@ -2,7 +2,7 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 
-namespace MD2Word.Word.Commands
+namespace MD2Word.Word.FileOperations
 {
     public class CreateDocumentFromTemplateCommand : CopyDocumentCommand
     {

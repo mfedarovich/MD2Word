@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Markdig.Helpers;
 
 namespace MD2Word
 {

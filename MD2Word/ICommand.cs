@@ -1,4 +1,4 @@
-﻿namespace MD2Word.Commands
+﻿namespace MD2Word
 {
     public interface ICommand
     {

@@ -1,6 +1,4 @@
-﻿using System;
-using Markdig.Renderers.Roundtrip;
-using Markdig.Syntax.Inlines;
+﻿using Markdig.Syntax.Inlines;
 
 namespace MD2Word.Markdown.Renderers.InlineRenderers
 {
@@ -61,9 +59,9 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
                             close = ')';
                         }
 
-                        renderer.Write(open);
+                        renderer.Write((char) open);
                         renderer.Write(link.UnescapedTitle);
-                        renderer.Write(close);
+                        renderer.Write((char) close);
                         renderer.Write(link.TriviaAfterTitle);
                     }
 
