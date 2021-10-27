@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MD2Word.App", "MD2Word.App\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MD2Word", "MD2Word\MD2Word.csproj", "{24C0611C-8BDA-434C-94E4-A685933DEB98}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MD2Word.Tests", "MD2Word.Tests\MD2Word.Tests.csproj", "{D6D81549-C4B1-4276-B46E-BB655232CAFE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{24C0611C-8BDA-434C-94E4-A685933DEB98}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{24C0611C-8BDA-434C-94E4-A685933DEB98}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{24C0611C-8BDA-434C-94E4-A685933DEB98}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6D81549-C4B1-4276-B46E-BB655232CAFE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6D81549-C4B1-4276-B46E-BB655232CAFE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6D81549-C4B1-4276-B46E-BB655232CAFE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6D81549-C4B1-4276-B46E-BB655232CAFE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
