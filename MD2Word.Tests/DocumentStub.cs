@@ -1,11 +1,14 @@
 ﻿using System.IO;
 using System.Text;
 
-namespace MD2Word.Tests
+namespace MD2Word
 {
     public class DocumentStub : IDocument
     {
         StringBuilder _executionLog = new StringBuilder();
+
+        public string Result => _executionLog.ToString();
+        
         public void StartNextParagraph()
         {
             _executionLog.AppendLine("p");
