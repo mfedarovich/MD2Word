@@ -62,13 +62,12 @@ namespace MD2Word.Word
                       paragraph.PrependChild(new ParagraphProperties());
             pPr.ParagraphStyleId = new ParagraphStyleId(){Val = styleId};
         }
-        
+
         public static void ApplyStyleId(this Run run, string styleId)
         {
-            var pPr = run.Elements<RunProperties>().FirstOrDefault() ?? 
+            var pPr = run.Elements<RunProperties>().FirstOrDefault() ??
                       run.PrependChild(new RunProperties());
-            pPr.RunStyle = new RunStyle {Val = styleId};
+            pPr.RunStyle = new RunStyle { Val = styleId };
         }
-
     }
 }

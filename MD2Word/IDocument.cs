@@ -8,6 +8,7 @@ namespace MD2Word
         TextWriter GetWriter();
         void WriteText(string text);
         void WriteInlineText(string text);
+        void WriteLine();
         void WriteHtml(string html);
         void PushStyle(string style, bool inline = false);
         void PopStyle();

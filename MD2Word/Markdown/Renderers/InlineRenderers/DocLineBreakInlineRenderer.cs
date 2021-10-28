@@ -1,4 +1,5 @@
-﻿using Markdig.Syntax.Inlines;
+﻿using System;
+using Markdig.Syntax.Inlines;
 
 namespace MD2Word.Markdown.Renderers.InlineRenderers
 {
@@ -10,11 +11,7 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
 
         protected override void Write(DocRenderer renderer, LineBreakInline obj)
         {
-            // if (obj.IsHard && obj.IsBackslash)
-            // {
-            //     renderer.Write("\\");
-            // }
-            // renderer.WriteLine(obj.NewLine);
+            Document.WriteLine();
         }
     }
 }

@@ -26,7 +26,12 @@ namespace MD2Word
 
         public void WriteInlineText(string text)
         {
-            _executionLog.AppendLine($"[{text}]");
+            _executionLog.Append($"[{text}]");
+        }
+
+        public void WriteLine()
+        {
+            _executionLog.AppendLine();
         }
 
         public void WriteHtml(string html)
@@ -59,7 +64,7 @@ namespace MD2Word
 
         public void WriteHyperlink(string url)
         {
-            _executionLog.AppendLine($"h:{url}");
+            _executionLog.Append($"h:{url}");
         }
     }
 }

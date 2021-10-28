@@ -51,15 +51,12 @@ namespace MD2Word
         
         public void WriteInlineText(string text)
         {
-            var run = _paragraph.AppendChild(new Run());
-            if (Inline)
-            {
-                run.ApplyStyleId(_doc.FindStyleIdByName(Style, false));
-            }
-            
-            var newChild = new Text(text);
-            newChild.Space = new EnumValue<SpaceProcessingModeValues>(SpaceProcessingModeValues.Preserve);
-            run.AppendChild(newChild);
+            AppendInlineText(_paragraph, text);
+        }
+
+        public void WriteLine()
+        {
+            _paragraph.AppendChild(new Run(new Break()));
         }
 
         public void WriteHtml(string html)
@@ -127,9 +124,24 @@ namespace MD2Word
 
         public void WriteHyperlink(string url)
         {
-            var hyperlink = new Hyperlink();
-            _paragraph.AppendChild(hyperlink);
-            AppendText(hyperlink, url);
+            WriteHyperlink(url,url);
+        }
+
+        private void WriteHyperlink(string label, string url)
+        {
+            var uri = new Uri(url);
+            var mainPart = _doc.MainDocumentPart;
+            var rel = mainPart!.HyperlinkRelationships.FirstOrDefault(hr => hr.Uri == uri) ??
+                      mainPart.AddHyperlinkRelationship(uri, true);
+
+            var hl = new Hyperlink(
+                new ProofError() { Type = ProofingErrorValues.GrammarStart },
+                new Run(
+                    new RunProperties(
+                        new RunStyle() { Val = "Hyperlink" }),
+                    new Text(label)
+                )) { History = OnOffValue.FromBoolean(true), Id = rel.Id };
+            _paragraph.AppendChild(hl);
         }
 
         private Paragraph CreateParagraphAfter(OpenXmlElement? element)
@@ -152,14 +164,25 @@ namespace MD2Word
         {
             var run = element.AppendChild(new Run());
 
-            if (text == Environment.NewLine)
-                run.AppendChild(new Break());
-            else
-            {
-                var newChild = new Text(text);
-                run.AppendChild(newChild);
-            }
+            var newChild = new Text(text);
+            run.AppendChild(newChild);
         }
+        
+        private void AppendInlineText(OpenXmlElement element, string text)
+        {
+            var run = element.AppendChild(new Run());
+            if (Inline)
+            {
+                run.ApplyStyleId(_doc.FindStyleIdByName(Style, false));
+            }
+            
+            var newChild = new Text(text)
+            {
+                Space = new EnumValue<SpaceProcessingModeValues>(SpaceProcessingModeValues.Preserve)
+            };
+            run.AppendChild(newChild);
+        }
+
 
     }
 }
