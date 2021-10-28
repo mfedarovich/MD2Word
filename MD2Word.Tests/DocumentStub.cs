@@ -56,5 +56,10 @@ namespace MD2Word
         {
             _executionLog.AppendLine("image from UML");
         }
+
+        public void WriteHyperlink(string url)
+        {
+            _executionLog.AppendLine($"h:{url}");
+        }
     }
 }

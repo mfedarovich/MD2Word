@@ -18,13 +18,12 @@ namespace MD2Word
             Renderer = new DocRenderer(Document);
             
             var pipelineBuilder = new MarkdownPipelineBuilder();
-            pipelineBuilder.EnableTrackTrivia();
             pipelineBuilder.BlockParsers.Add(new ExtendedBlockParser());
             Pipeline = pipelineBuilder.Build();
             
         }
 
-        protected void Check(string markdown, string expectedResult)
+        protected void TestOutput(string markdown, string expectedResult)
         {
             Markdig.Markdown.Convert(markdown, Renderer, Pipeline);
             Assert.AreEqual(expectedResult, Document.Result);

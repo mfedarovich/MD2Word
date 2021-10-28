@@ -34,7 +34,6 @@ namespace MD2Word
                     @"d:\Projects\Tecan\Improvements\Documentation\Markdown\MD2Word.App\MD2Word.App\bin\Debug\netcoreapp3.1\Graph.md";
                 var mdContent = File.ReadAllText(mdFile);
                 var pipelineBuilder = new MarkdownPipelineBuilder();
-                pipelineBuilder.EnableTrackTrivia();
                 pipelineBuilder.BlockParsers.Add(new ExtendedBlockParser());
                 MarkdownPipeline pipeline = pipelineBuilder.Build();
                 Markdig.Markdown.Convert(mdContent, new DocRenderer(new Document(doc)), pipeline);

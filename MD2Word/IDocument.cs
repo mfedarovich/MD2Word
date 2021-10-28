@@ -13,5 +13,6 @@ namespace MD2Word
         void PopStyle();
         void InsertImageFromFile(string fileName);
         void InsertUml(string umlScript);
+        void WriteHyperlink(string url);
     }
 }

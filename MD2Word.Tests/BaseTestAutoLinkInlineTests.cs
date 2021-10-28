@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 
 namespace MD2Word
@@ -5,18 +6,17 @@ namespace MD2Word
     [TestFixture]
     internal class BaseTestAutoLinkInlineTests : BaseTest
     {
-        [TestCase("<http://a>")]
-        [TestCase(" <http://a>")]
-        [TestCase("<http://a> ")]
-        [TestCase(" <http://a> ")]
-        [TestCase("<example@example.com>")]
-        [TestCase(" <example@example.com>")]
-        [TestCase("<example@example.com> ")]
-        [TestCase(" <example@example.com> ")]
-        [TestCase("p http://a p")]
-        public void Test(string value)
+        [TestCase("<http://a>", "http://a")]
+        [TestCase(" <http://a>", "http://a")]
+        [TestCase("<http://a> ", "http://a")]
+        [TestCase(" <http://a> ", "http://a")]
+        [TestCase("<example@example.com>","example@example.com")]
+        [TestCase(" <example@example.com>","example@example.com")]
+        [TestCase("<example@example.com> ","example@example.com")]
+        [TestCase(" <example@example.com> ","example@example.com")]
+        public void Test(string value, string url)
         {
-            Check(value, "");
+            TestOutput(value, $"p{Environment.NewLine}h:{url}{Environment.NewLine}");
         }
     }
 }

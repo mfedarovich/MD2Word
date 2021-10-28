@@ -46,17 +46,9 @@ namespace MD2Word
         
         public void WriteText(string text)
         {
-            var run = _paragraph.AppendChild(new Run());
-  
-            if (text == Environment.NewLine)
-                run.AppendChild(new Break());
-            else
-            {
-                var newChild = new Text(text);
-                run.AppendChild(newChild);
-            }
+            AppendText(_paragraph, text);
         }
-
+        
         public void WriteInlineText(string text)
         {
             var run = _paragraph.AppendChild(new Run());
@@ -133,6 +125,13 @@ namespace MD2Word
             InsertPngImage(buffer);
         }
 
+        public void WriteHyperlink(string url)
+        {
+            var hyperlink = new Hyperlink();
+            _paragraph.AppendChild(hyperlink);
+            AppendText(hyperlink, url);
+        }
+
         private Paragraph CreateParagraphAfter(OpenXmlElement? element)
         {
             bool removePlaceholder = false;
@@ -148,5 +147,19 @@ namespace MD2Word
                 element.Remove();
             return paragraph;
         }
+        
+        private void AppendText(OpenXmlElement element, string text)
+        {
+            var run = element.AppendChild(new Run());
+
+            if (text == Environment.NewLine)
+                run.AppendChild(new Break());
+            else
+            {
+                var newChild = new Text(text);
+                run.AppendChild(newChild);
+            }
+        }
+
     }
 }
