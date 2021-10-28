@@ -2,15 +2,15 @@
 
 namespace MD2Word.Markdown.Renderers.InlineRenderers
 {
-    public class DocRoundtripHtmlEntityInlineRenderer : DocInlineRenderer<HtmlEntityInline>
+    public class DocHtmlEntityInlineRenderer : DocInlineRenderer<HtmlEntityInline>
     {
-        public DocRoundtripHtmlEntityInlineRenderer(IDocument document) : base(document)
+        public DocHtmlEntityInlineRenderer(IDocument document) : base(document)
         {
         }
 
         protected override void Write(DocRenderer renderer, HtmlEntityInline obj)
         {
-            renderer.Write(obj.Original);
+            Document.WriteSymbol(obj.Original.ToString());
         }
     }
 }

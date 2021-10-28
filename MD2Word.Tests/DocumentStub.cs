@@ -29,6 +29,11 @@ namespace MD2Word
             _executionLog.Append($"[{text}]");
         }
 
+        public void WriteSymbol(string htmlSymbol)
+        {
+            WriteInlineText(htmlSymbol);
+        }
+
         public void WriteLine()
         {
             _executionLog.AppendLine();

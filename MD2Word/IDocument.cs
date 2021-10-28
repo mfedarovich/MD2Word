@@ -9,6 +9,7 @@ namespace MD2Word
         void WriteText(string text);
         void WriteInlineText(string text);
         void WriteHyperlink(string url);
+        void WriteSymbol(string htmlSymbol);
         void WriteLine();
         void WriteHtml(string html);
         void PushStyle(string style, bool inline = false);

@@ -46,6 +46,11 @@ namespace MD2Word
             AppendInlineText(_paragraph, text);
         }
 
+        public void WriteSymbol(string htmlSymbol)
+        {
+            AppendInlineText(_paragraph, htmlSymbol, false);
+        }
+
         public void WriteLine()
         {
             _paragraph.AppendChild(new Run(new Break()));
@@ -161,20 +166,46 @@ namespace MD2Word
             run.AppendChild(newChild);
         }
         
-        private void AppendInlineText(OpenXmlElement element, string text)
+        private void AppendInlineText(OpenXmlElement element, string text, bool isText = true)
         {
-            var run = element.AppendChild(new Run());
+            var run = new Run();
             if (_style.Inline)
             {
                 run.ApplyStyleId(_doc.FindStyleIdByName(_style.Style, false));
             }
             
             run.Emphasise(_style.Italic, _style.Bold);
-            var newChild = new Text(text)
+
+            OpenXmlElement newChild = null;
+            if (!isText)
             {
-                Space = new EnumValue<SpaceProcessingModeValues>(SpaceProcessingModeValues.Preserve)
-            };
+                var pos = text.IndexOf("&#", StringComparison.Ordinal);
+                if (pos >= 0)
+                {
+                    var startIndex = pos + 2;
+                    var number = text.Substring(startIndex, text.Length - startIndex - 1);
+                    if (number.All(c => char.IsNumber(c) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')))
+                    {
+                        newChild = new SymbolChar()
+                        {
+                            // -1 - ignore ';' at the end
+                            Char = new HexBinaryValue() { Value = number },
+                            Font = new StringValue() { Value = "Symbol" }
+                        };
+                    }
+                }
+            }
+            
+            if (newChild == null)
+            {
+                newChild = new Text(text)
+                {
+                    Space = new EnumValue<SpaceProcessingModeValues>(SpaceProcessingModeValues.Preserve)
+                };
+            }
+            
             run.AppendChild(newChild);
+            element.AppendChild(run);
         }
     }
 }

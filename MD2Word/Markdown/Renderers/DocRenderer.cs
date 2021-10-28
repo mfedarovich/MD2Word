@@ -42,8 +42,8 @@ namespace MD2Word.Markdown.Renderers
             ObjectRenderers.Add(new DocDelimiterInlineRenderer(document));
             ObjectRenderers.Add(new DocEmphasisInlineRenderer(document));
             ObjectRenderers.Add(new DocLineBreakInlineRenderer(document));
-            ObjectRenderers.Add(new DocRoundtripHtmlInlineRenderer(document));
-            ObjectRenderers.Add(new DocRoundtripHtmlEntityInlineRenderer(document));            
+            ObjectRenderers.Add(new DocHtmlInlineRenderer(document));
+            ObjectRenderers.Add(new DocHtmlEntityInlineRenderer(document));            
             ObjectRenderers.Add(new DocLinkInlineRenderer(document));
             ObjectRenderers.Add(new DocLiteralInlineRenderer(document));
         }
