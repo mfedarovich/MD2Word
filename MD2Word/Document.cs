@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -13,25 +12,21 @@ namespace MD2Word
 {
     public class Document : IDocument
     {
-        private readonly Stack<Tuple<string, bool>> _stack = new Stack<Tuple<string, bool>>();
         private readonly WordprocessingDocument _doc;
         private Paragraph _paragraph;
         private readonly EmbeddedImage _image;
+        private readonly DocStyle _style = new();
 
         public Document(WordprocessingDocument doc)
         {
             _doc = doc;
             _image = new EmbeddedImage(doc, 500);
-            _stack.Push(new Tuple<string, bool>("Body Text", false)); 
         }
 
         public void StartNextParagraph()
         {
             _paragraph = CreateParagraphAfter(_paragraph);
-            var styleName = Style;
-            if (Inline)
-                styleName = _stack.AsEnumerable().Reverse().FirstOrDefault(x => !x.Item2)?.Item1;
-
+            var styleName = _style.ParagraphStyle;
             if (styleName != null)
                 _paragraph.ApplyStyleId(_doc.FindStyleIdByName(styleName));
         }
@@ -40,9 +35,6 @@ namespace MD2Word
         {
             return new DocumentWriter(this);
         }
-        
-        private string Style => _stack.Peek().Item1;
-        private bool Inline => _stack.Peek().Item2;
         
         public void WriteText(string text)
         {
@@ -84,20 +76,12 @@ namespace MD2Word
 
         public void PushStyle(string style, bool inline)
         {
-            _stack.Push(new Tuple<string, bool>(style, inline));
-            // var pPr = _paragraph.Elements<ParagraphProperties>().FirstOrDefault();
-            // _stack.Push(pPr?.ParagraphStyleId?.Val);
+            _style.Push(style, inline);
         }
 
         public void PopStyle()
         {
-            // var styleId =
-            _stack.Pop();
-        //     if (styleId != null)
-        //     {
-        //         _paragraph = CreateParagraphAfter(_paragraph);
-        //         ApplyStyleId(styleId);
-        //     }
+            _style.Pop();
         }
 
         public void InsertPngImage(byte[] buffer)
@@ -127,6 +111,12 @@ namespace MD2Word
             WriteHyperlink(url,url);
         }
 
+        public void Emphasise(bool italic, bool bold)
+        {
+            _style.Bold = bold;
+            _style.Italic = italic;
+        }
+        
         private void WriteHyperlink(string label, string url)
         {
             var uri = new Uri(url);
@@ -171,9 +161,9 @@ namespace MD2Word
         private void AppendInlineText(OpenXmlElement element, string text)
         {
             var run = element.AppendChild(new Run());
-            if (Inline)
+            if (_style.Inline)
             {
-                run.ApplyStyleId(_doc.FindStyleIdByName(Style, false));
+                run.ApplyStyleId(_doc.FindStyleIdByName(_style.Style, false));
             }
             
             var newChild = new Text(text)

@@ -8,7 +8,10 @@ namespace MD2Word
         StringBuilder _executionLog = new StringBuilder();
 
         public string Result => _executionLog.ToString();
-        
+
+        public bool Bold { get; private set; }
+        public bool Italic { get; private set; }
+
         public void StartNextParagraph()
         {
             _executionLog.AppendLine("p");
@@ -65,6 +68,12 @@ namespace MD2Word
         public void WriteHyperlink(string url)
         {
             _executionLog.Append($"h:{url}");
+        }
+
+        public void Emphasise(bool italic, bool bold)
+        {
+            Italic = italic;
+            Bold = bold;
         }
     }
 }

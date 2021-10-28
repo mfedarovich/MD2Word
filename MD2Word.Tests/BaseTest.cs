@@ -7,9 +7,9 @@ namespace MD2Word
 {
     public class BaseTest
     {
-        protected DocumentStub Document { get; private set; } 
+        private DocumentStub Document { get; set; } 
         private DocRenderer Renderer { get; set; }
-        private MarkdownPipeline Pipeline { get; set; }
+        protected MarkdownPipeline Pipeline { get; private set; }
         
         [SetUp]
         public void Setup()

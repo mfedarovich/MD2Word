@@ -15,5 +15,6 @@ namespace MD2Word
         void InsertImageFromFile(string fileName);
         void InsertUml(string umlScript);
         void WriteHyperlink(string url);
+        void Emphasise(bool italic, bool bold);
     }
 }

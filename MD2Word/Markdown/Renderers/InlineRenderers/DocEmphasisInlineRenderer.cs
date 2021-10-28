@@ -1,24 +1,33 @@
-﻿using System;
-using Markdig.Syntax.Inlines;
+﻿using Markdig.Syntax.Inlines;
 
 namespace MD2Word.Markdown.Renderers.InlineRenderers
 {
     public class DocEmphasisInlineRenderer: DocInlineRenderer<EmphasisInline>
     {
+        private int _italicCount = 0;
+        private int _boldCount = 0;
         public DocEmphasisInlineRenderer(IDocument document) : base(document)
         {
         }
 
         protected override void Write(DocRenderer renderer, EmphasisInline obj)
         {
-            Document.PushStyle("InfoBlue");
-            Document.WriteText("<!-EmphasisInline-->" + Environment.NewLine);
-            Document.PopStyle();
+            switch (obj.DelimiterCount)
+            {
+                case 1: _italicCount++;  break;
+                case 2: _boldCount++; break;
+            }
+            
+            Document.Emphasise(_italicCount > 0, _boldCount > 0);
 
-            var emphasisText = new string(obj.DelimiterChar, obj.DelimiterCount);
-            renderer.Write(emphasisText);
             renderer.WriteChildren(obj);
-            renderer.Write(emphasisText);
+
+            switch (obj.DelimiterCount)
+            {
+                case 1: _italicCount--;  break;
+                case 2: _boldCount--; break;
+            }
+            Document.Emphasise(_italicCount > 0, _boldCount > 0);
         }
     }
 }
