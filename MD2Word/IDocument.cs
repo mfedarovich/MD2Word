@@ -8,13 +8,13 @@ namespace MD2Word
         TextWriter GetWriter();
         void WriteText(string text);
         void WriteInlineText(string text);
+        void WriteHyperlink(string url);
         void WriteLine();
         void WriteHtml(string html);
         void PushStyle(string style, bool inline = false);
         void PopStyle();
         void InsertImageFromFile(string fileName);
         void InsertUml(string umlScript);
-        void WriteHyperlink(string url);
         void Emphasise(bool italic, bool bold);
     }
 }

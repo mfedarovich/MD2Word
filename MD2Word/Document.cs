@@ -50,6 +50,16 @@ namespace MD2Word
         {
             _paragraph.AppendChild(new Run(new Break()));
         }
+        public void WriteHyperlink(string url)
+        {
+            WriteHyperlink(url,url);
+        }
+
+        public void Emphasise(bool italic, bool bold)
+        {
+            _style.Bold = bold;
+            _style.Italic = italic;
+        }
 
         public void WriteHtml(string html)
         {
@@ -105,17 +115,6 @@ namespace MD2Word
             var buffer = plantUmlRenderer.Render(umlScript, OutputFormat.Png);
             InsertPngImage(buffer);
         }
-
-        public void WriteHyperlink(string url)
-        {
-            WriteHyperlink(url,url);
-        }
-
-        public void Emphasise(bool italic, bool bold)
-        {
-            _style.Bold = bold;
-            _style.Italic = italic;
-        }
         
         private void WriteHyperlink(string label, string url)
         {
@@ -124,13 +123,16 @@ namespace MD2Word
             var rel = mainPart!.HyperlinkRelationships.FirstOrDefault(hr => hr.Uri == uri) ??
                       mainPart.AddHyperlinkRelationship(uri, true);
 
+            var run = new Run(
+                new RunProperties(
+                    new RunStyle() { Val = "Hyperlink" }),
+                new Text(label)
+            );
+            run.Emphasise(_style.Italic, _style.Bold);
+            
             var hl = new Hyperlink(
                 new ProofError() { Type = ProofingErrorValues.GrammarStart },
-                new Run(
-                    new RunProperties(
-                        new RunStyle() { Val = "Hyperlink" }),
-                    new Text(label)
-                )) { History = OnOffValue.FromBoolean(true), Id = rel.Id };
+                run) { History = OnOffValue.FromBoolean(true), Id = rel.Id };
             _paragraph.AppendChild(hl);
         }
 
@@ -153,6 +155,7 @@ namespace MD2Word
         private void AppendText(OpenXmlElement element, string text)
         {
             var run = element.AppendChild(new Run());
+            run.Emphasise(_style.Italic, _style.Bold);
 
             var newChild = new Text(text);
             run.AppendChild(newChild);
@@ -166,13 +169,12 @@ namespace MD2Word
                 run.ApplyStyleId(_doc.FindStyleIdByName(_style.Style, false));
             }
             
+            run.Emphasise(_style.Italic, _style.Bold);
             var newChild = new Text(text)
             {
                 Space = new EnumValue<SpaceProcessingModeValues>(SpaceProcessingModeValues.Preserve)
             };
             run.AppendChild(newChild);
         }
-
-
     }
 }
