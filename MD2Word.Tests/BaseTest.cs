@@ -5,7 +5,7 @@ using NUnit.Framework;
 
 namespace MD2Word
 {
-    internal class BaseTest
+    public class BaseTest
     {
         protected DocumentStub Document { get; private set; } 
         private DocRenderer Renderer { get; set; }

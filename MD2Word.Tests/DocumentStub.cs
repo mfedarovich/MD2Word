@@ -41,15 +41,15 @@ namespace MD2Word
 
         public void PushStyle(string style, bool inline = false)
         {
-            _executionLog.Append("pushed ");
+            _executionLog.Append("{");
             if (inline)
-                _executionLog.Append("inline ");
-            _executionLog.AppendLine($"style:{style}");
+                _executionLog.Append("i");
+            _executionLog.AppendFormat("{0}}}", style.ToUpper());
         }
 
         public void PopStyle()
         {
-            _executionLog.AppendLine("pop style");
+            _executionLog.Append("{!}");
         }
         
         public void InsertImageFromFile(string fileName)
