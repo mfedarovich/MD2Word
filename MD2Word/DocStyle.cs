@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace MD2Word
 {
-    class DocStyle
+    public class DocStyle
     {
         private readonly Stack<Tuple<string, bool>> _stack = new();
 

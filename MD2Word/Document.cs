@@ -10,7 +10,7 @@ using PlantUml.Net;
 
 namespace MD2Word
 {
-    public class Document : IDocument
+    public partial class Document : IDocument
     {
         private readonly WordprocessingDocument _doc;
         private Paragraph _paragraph;
@@ -43,12 +43,23 @@ namespace MD2Word
         
         public void WriteInlineText(string text)
         {
-            AppendInlineText(_paragraph, text);
+            var run = new Run();
+            run.ApplyInlineStyle(_doc, _style)
+                .Emphasise(_style.Italic, _style.Bold)
+                .AppendText(text, true);
+            _paragraph.AppendChild(run);
         }
 
         public void WriteSymbol(string htmlSymbol)
         {
-            AppendInlineText(_paragraph, htmlSymbol, false);
+            var symbol = HtmlSymbol.Parse(htmlSymbol);
+            var run = new Run();
+            run
+                .ApplyInlineStyle(_doc, _style)
+                .Emphasise(_style.Italic, _style.Bold)
+                .AppendSymbol(symbol);
+            
+            _paragraph.AppendChild(run);
         }
 
         public void WriteLine()
@@ -164,48 +175,6 @@ namespace MD2Word
 
             var newChild = new Text(text);
             run.AppendChild(newChild);
-        }
-        
-        private void AppendInlineText(OpenXmlElement element, string text, bool isText = true)
-        {
-            var run = new Run();
-            if (_style.Inline)
-            {
-                run.ApplyStyleId(_doc.FindStyleIdByName(_style.Style, false));
-            }
-            
-            run.Emphasise(_style.Italic, _style.Bold);
-
-            OpenXmlElement newChild = null;
-            if (!isText)
-            {
-                var pos = text.IndexOf("&#", StringComparison.Ordinal);
-                if (pos >= 0)
-                {
-                    var startIndex = pos + 2;
-                    var number = text.Substring(startIndex, text.Length - startIndex - 1);
-                    if (number.All(c => char.IsNumber(c) || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F')))
-                    {
-                        newChild = new SymbolChar()
-                        {
-                            // -1 - ignore ';' at the end
-                            Char = new HexBinaryValue() { Value = number },
-                            Font = new StringValue() { Value = "Symbol" }
-                        };
-                    }
-                }
-            }
-            
-            if (newChild == null)
-            {
-                newChild = new Text(text)
-                {
-                    Space = new EnumValue<SpaceProcessingModeValues>(SpaceProcessingModeValues.Preserve)
-                };
-            }
-            
-            run.AppendChild(newChild);
-            element.AppendChild(run);
         }
     }
 }

@@ -11,7 +11,6 @@ namespace MD2Word
         void WriteHyperlink(string url);
         void WriteSymbol(string htmlSymbol);
         void WriteLine();
-        void WriteHtml(string html);
         void PushStyle(string style, bool inline = false);
         void PopStyle();
         void InsertImageFromFile(string fileName);

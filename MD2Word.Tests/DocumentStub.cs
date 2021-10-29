@@ -38,12 +38,7 @@ namespace MD2Word
         {
             _executionLog.AppendLine();
         }
-
-        public void WriteHtml(string html)
-        {
-            _executionLog.AppendLine($"html:{html}");
-        }
-
+        
         public void PushStyle(string style, bool inline = false)
         {
             _executionLog.Append("{");
