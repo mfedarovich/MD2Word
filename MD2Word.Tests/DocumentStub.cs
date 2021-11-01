@@ -39,15 +39,20 @@ namespace MD2Word
             _executionLog.AppendLine();
         }
         
-        public void PushStyle(string style, bool inline = false)
+        public void PushStyle(FontStyles style, bool inline)
         {
             _executionLog.Append("{");
             if (inline)
                 _executionLog.Append("i");
-            _executionLog.AppendFormat("{0}}}", style.ToUpper());
+            _executionLog.AppendFormat("{0}}}", style.ToString().ToUpper());
         }
 
-        public void PopStyle()
+        public void PushStyle(FontStyles style, int nestingLevel)
+        {
+            _executionLog.AppendFormat("{{{0}#{1}}}", style, nestingLevel);
+        }
+
+        public void PopStyle(bool inline)
         {
             _executionLog.Append("{!}");
         }

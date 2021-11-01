@@ -75,9 +75,9 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
             Document.StartNextParagraph();
             if (!string.IsNullOrEmpty(link.Title))
             {
-                Document.PushStyle("Caption_style", true);
+                Document.PushStyle(FontStyles.Caption, true);
                 renderer.Write(link.UnescapedTitle);
-                Document.PopStyle();
+                Document.PopStyle(true);
             }
 
             Document.InsertImageFromFile(link.UnescapedUrl.ToString());

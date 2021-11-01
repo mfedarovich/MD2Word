@@ -10,7 +10,7 @@ using PlantUml.Net;
 
 namespace MD2Word
 {
-    public partial class Document : IDocument
+    public class Document : IDocument
     {
         private readonly WordprocessingDocument _doc;
         private Paragraph _paragraph;
@@ -26,9 +26,7 @@ namespace MD2Word
         public void StartNextParagraph()
         {
             _paragraph = CreateParagraphAfter(_paragraph);
-            var styleName = _style.ParagraphStyle;
-            if (styleName != null)
-                _paragraph.ApplyStyleId(_doc.FindStyleIdByName(styleName));
+            _paragraph.ApplyStyleId(_doc.FindStyleIdByName(_style.ParagraphName));
         }
 
         public TextWriter GetWriter()
@@ -100,14 +98,19 @@ namespace MD2Word
             _paragraph.Append(altChunk);
         }
 
-        public void PushStyle(string style, bool inline)
+        public void PushStyle(FontStyles style, bool inline)
         {
             _style.Push(style, inline);
         }
 
-        public void PopStyle()
+        public void PushStyle(FontStyles style, int nestingLevel)
         {
-            _style.Pop();
+            _style.Push(style, nestingLevel);
+        }
+
+        public void PopStyle(bool inline)
+        {
+            _style.Pop(inline);
         }
 
         public void InsertPngImage(byte[] buffer)

@@ -9,10 +9,7 @@ namespace MD2Word.Word
     {
         public static Run ApplyInlineStyle(this Run run, WordprocessingDocument doc, DocStyle style)
         {
-            if (style.Inline)
-            {
-                run.ApplyStyleId(doc.FindStyleIdByName(style.Style, false));
-            }
+            run.ApplyStyleId(doc.FindStyleIdByName(style.InlineName, false));
 
             return run;
         }

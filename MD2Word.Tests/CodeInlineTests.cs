@@ -42,7 +42,7 @@ namespace MD2Word
         public void TestInlineCode(string markdown, string code)
         {
             var expected = @$"p
-{{iCODE TEXT}}[{code}]{{!}}";
+{{iCODETEXT}}[{code}]{{!}}";
 
             TestOutput(markdown, expected);
         }
@@ -53,7 +53,7 @@ namespace MD2Word
         public void TestParagraph(string markdown, string code)
         {
             var expected = @$"p
-[p ]{{iCODE TEXT}}[{code}]{{!}}[ p]";
+[p ]{{iCODETEXT}}[{code}]{{!}}[ p]";
             TestOutput(markdown, expected);
         }
 
@@ -69,7 +69,7 @@ namespace MD2Word
         public void TestNewlines(string markdown)
         {
             var expected = markdown.Substring(1, markdown.Length - 2);
-            expected = $"p{Environment.NewLine}{{iCODE TEXT}}[{expected}]{{!}}";
+            expected = $"p{Environment.NewLine}{{iCODETEXT}}[{expected}]{{!}}";
             TestOutput(markdown, expected);
         }
 

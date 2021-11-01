@@ -12,7 +12,7 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
         {
             if (listBlock.IsOrdered)
             {
-                Document.PushStyle("List Number");
+                Document.PushStyle(FontStyles.NumberList, false);
                 for (var i = 0; i < listBlock.Count; i++)
                 {
                     var item = listBlock[i];
@@ -22,7 +22,7 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
             }
             else
             {
-                Document.PushStyle("List Bullet");
+                Document.PushStyle(FontStyles.BulletList,  false);
 
                 for (var i = 0; i < listBlock.Count; i++)
                 {
@@ -35,7 +35,7 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
                 }
             }
 
-            Document.PopStyle();
+            Document.PopStyle(false);
         }
     }
 }

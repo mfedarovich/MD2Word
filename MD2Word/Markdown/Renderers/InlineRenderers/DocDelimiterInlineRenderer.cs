@@ -12,10 +12,6 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
 
         protected override void Write(DocRenderer renderer, DelimiterInline obj)
         {
-            Document.PushStyle("InfoBlue", true);
-            Document.WriteInlineText("<!-DelimiterInline-->" + Environment.NewLine);
-            Document.PopStyle();
-
             renderer.Write((string?) obj.ToLiteral());
             renderer.WriteChildren(obj);
         }

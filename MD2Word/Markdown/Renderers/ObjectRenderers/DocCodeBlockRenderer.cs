@@ -11,11 +11,11 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, CodeBlock obj)
         {
-            Document.PushStyle("Code");
+            Document.PushStyle(FontStyles.CodeBlock, false);
             var text = obj.Lines.ToSlice().ToString();
             Document.WriteText(text);
             
-            Document.PopStyle();
+            Document.PopStyle(false);
 
             // foreach (var line in obj.CodeBlockLines)
             // {
