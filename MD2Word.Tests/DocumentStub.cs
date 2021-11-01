@@ -29,6 +29,11 @@ namespace MD2Word
             _executionLog.Append($"[{text}]");
         }
 
+        public void WriteHyperlink(string label, string url)
+        {
+            _executionLog.Append($"h:{label}-{url}");
+        }
+
         public void WriteSymbol(string htmlSymbol)
         {
             WriteInlineText(htmlSymbol);
@@ -59,7 +64,12 @@ namespace MD2Word
         
         public void InsertImageFromFile(string fileName)
         {
-            _executionLog.AppendLine($"image from file: {fileName}");
+            _executionLog.AppendLine($"img-file:{fileName}");
+        }
+
+        public void InsertImageFromUrl(string url)
+        {
+            _executionLog.AppendLine($"img-url:{url}");
         }
 
         public void InsertUml(string umlScript)

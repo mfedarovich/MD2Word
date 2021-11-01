@@ -68,6 +68,25 @@ namespace MD2Word
         {
             WriteHyperlink(url,url);
         }
+        public void WriteHyperlink(string label, string url)
+        {
+            var uri = new Uri(url);
+            var mainPart = _doc.MainDocumentPart;
+            var rel = mainPart!.HyperlinkRelationships.FirstOrDefault(hr => hr.Uri == uri) ??
+                      mainPart.AddHyperlinkRelationship(uri, true);
+
+            var run = new Run(
+                new RunProperties(
+                    new RunStyle() { Val = "Hyperlink" }),
+                new Text(label)
+            );
+            run.Emphasise(_style.Italic, _style.Bold);
+            
+            var hl = new Hyperlink(
+                new ProofError() { Type = ProofingErrorValues.GrammarStart },
+                run) { History = OnOffValue.FromBoolean(true), Id = rel.Id };
+            _paragraph.AppendChild(hl);
+        }
 
         public void Emphasise(bool italic, bool bold)
         {
@@ -127,32 +146,17 @@ namespace MD2Word
             InsertPngImage(File.ReadAllBytes(fileName));
         }
 
+        public void InsertImageFromUrl(string url)
+        {
+            throw new NotImplementedException();
+        }
+
         public void InsertUml(string umlScript)
         {
             var factory = new RendererFactory();
             var plantUmlRenderer = factory.CreateRenderer(new PlantUmlSettings());
             var buffer = plantUmlRenderer.Render(umlScript, OutputFormat.Png);
             InsertPngImage(buffer);
-        }
-        
-        private void WriteHyperlink(string label, string url)
-        {
-            var uri = new Uri(url);
-            var mainPart = _doc.MainDocumentPart;
-            var rel = mainPart!.HyperlinkRelationships.FirstOrDefault(hr => hr.Uri == uri) ??
-                      mainPart.AddHyperlinkRelationship(uri, true);
-
-            var run = new Run(
-                new RunProperties(
-                    new RunStyle() { Val = "Hyperlink" }),
-                new Text(label)
-            );
-            run.Emphasise(_style.Italic, _style.Bold);
-            
-            var hl = new Hyperlink(
-                new ProofError() { Type = ProofingErrorValues.GrammarStart },
-                run) { History = OnOffValue.FromBoolean(true), Id = rel.Id };
-            _paragraph.AppendChild(hl);
         }
 
         private Paragraph CreateParagraphAfter(OpenXmlElement? element)

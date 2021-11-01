@@ -1,4 +1,5 @@
-﻿using Markdig.Syntax.Inlines;
+﻿using System.IO;
+using Markdig.Syntax.Inlines;
 
 namespace MD2Word.Markdown.Renderers.InlineRenderers
 {
@@ -10,77 +11,46 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
         
         protected override void Write(DocRenderer renderer, LinkInline link)
         {
-            if (link.IsImage)
-            {
-                DrawImage(renderer, link);
-                return;
-            }
             // link text
             renderer.WriteChildren(link);
-
-            if (link.Label != null)
+            
+            if (link.Label != null && link.LocalLabel == LocalLabel.Local)
             {
-                if (link.LocalLabel == LocalLabel.Local || link.LocalLabel == LocalLabel.Empty)
-                {
-                    renderer.Write('[');
-                    if (link.LocalLabel == LocalLabel.Local)
-                    {
-                        renderer.Write(link.LabelWithTrivia);
-                    }
-
-                    renderer.Write(']');
-                }
+                Document.WriteText(link.Label);
             }
-            else
+            else if (link.Url != null)
             {
-                if (link.Url != null)
+                if (link.IsImage)
                 {
-                    renderer.Write('(');
-                    renderer.Write(link.TriviaBeforeUrl);
-                    if (link.UrlHasPointyBrackets)
-                    {
-                        renderer.Write('<');
-                    }
-
-                    renderer.Write(link.UnescapedUrl);
-                    if (link.UrlHasPointyBrackets)
-                    {
-                        renderer.Write('>');
-                    }
-
-                    renderer.Write(link.TriviaAfterUrl);
-
-                    if (!string.IsNullOrEmpty(link.Title))
-                    {
-                        var open = link.TitleEnclosingCharacter;
-                        var close = link.TitleEnclosingCharacter;
-                        if (link.TitleEnclosingCharacter == '(')
-                        {
-                            close = ')';
-                        }
-
-                        renderer.Write((char) open);
-                        renderer.Write(link.UnescapedTitle);
-                        renderer.Write((char) close);
-                        renderer.Write(link.TriviaAfterTitle);
-                    }
-
-                    renderer.Write(')');
+                    DrawImage(link);
+                }
+                else
+                {
+                    InsertHyperlink(link);
                 }
             }
         }
 
-        private void DrawImage(DocRenderer renderer, LinkInline link)
+        private void InsertHyperlink(LinkInline link)
+        {
+            var title = link.Title ?? link.Url;
+            Document.WriteHyperlink(link.Url);
+        }
+
+        private void DrawImage(LinkInline link)
         {
             Document.StartNextParagraph();
             if (!string.IsNullOrEmpty(link.Title))
             {
                 Document.PushStyle(FontStyles.Caption, true);
-                renderer.Write(link.UnescapedTitle);
+                Document.WriteText(link.Title);
                 Document.PopStyle(true);
             }
 
-            Document.InsertImageFromFile(link.UnescapedUrl.ToString());
+            if (File.Exists(link.Url))
+                Document.InsertImageFromFile(link.Url);
+            else
+                Document.InsertImageFromUrl(link.Url);
         }
     }
 }
