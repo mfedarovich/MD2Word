@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
@@ -148,7 +150,9 @@ namespace MD2Word
 
         public void InsertImageFromUrl(string url)
         {
-            throw new NotImplementedException();
+            using var webClient = new WebClient();
+            var data = webClient.DownloadData(url);
+            InsertPngImage(data);
         }
 
         public void InsertUml(string umlScript)

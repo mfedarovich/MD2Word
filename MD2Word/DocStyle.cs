@@ -25,7 +25,7 @@ namespace MD2Word
             // _converter.Add(FontStyles.BulletList, "List Bullet");
             _converter.Add(FontStyles.BodyText, "Normal");
             _converter.Add(FontStyles.CodeText, "Code Text");
-            _converter.Add(FontStyles.Caption, "Caption_style");
+            _converter.Add(FontStyles.Caption, "Subtitle");
             _converter.Add(FontStyles.CodeBlock, "Code");
             _converter.Add(FontStyles.Heading, "Heading {0}");
             _converter.Add(FontStyles.NumberList, "List Number");

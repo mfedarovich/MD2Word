@@ -12,7 +12,10 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
         protected override void Write(DocRenderer renderer, LinkInline link)
         {
             // link text
+            Document.PushStyle(FontStyles.Caption, true);
+            Document.StartNextParagraph();
             renderer.WriteChildren(link);
+            Document.PopStyle(true);
             
             if (link.Label != null && link.LocalLabel == LocalLabel.Local)
             {
@@ -39,7 +42,6 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
 
         private void DrawImage(LinkInline link)
         {
-            Document.StartNextParagraph();
             if (!string.IsNullOrEmpty(link.Title))
             {
                 Document.PushStyle(FontStyles.Caption, true);

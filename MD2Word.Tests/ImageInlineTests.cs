@@ -10,7 +10,7 @@ namespace MD2Word
         public void TestEmptyDescription(string value, string description, string url, bool isLocal)
         {
             var expected =
-                $@"p{Environment.NewLine}p{Environment.NewLine}img-{(isLocal ? "file" : "url")}:{url}{Environment.NewLine}";
+                $@"p{Environment.NewLine}{{iCAPTION}}p{Environment.NewLine}{{!}}img-{(isLocal ? "file" : "url")}:{url}{Environment.NewLine}";
             TestOutput(value, expected);
         }
         
@@ -19,7 +19,7 @@ namespace MD2Word
         public void TestLinkWithDescription(string value, string description, string url, bool isLocal)
         {
             var expected =
-                $@"p{Environment.NewLine}[{description}]p{Environment.NewLine}img-{(isLocal ? "file" : "url")}:{url}{Environment.NewLine}";
+                $@"p{Environment.NewLine}{{iCAPTION}}p{Environment.NewLine}[{description}]{{!}}img-{(isLocal ? "file" : "url")}:{url}{Environment.NewLine}";
             TestOutput(value, expected);
         }
 
@@ -28,7 +28,7 @@ namespace MD2Word
         {
             var value = "paragraph ![description](http://example.com)";
             var expected =
-                $@"p{Environment.NewLine}[paragraph ][description]p{Environment.NewLine}img-url:http://example.com{Environment.NewLine}";
+                $@"p{Environment.NewLine}[paragraph ]{{iCAPTION}}p{Environment.NewLine}[description]{{!}}img-url:http://example.com{Environment.NewLine}";
             TestOutput(value, expected);
         }
     }
