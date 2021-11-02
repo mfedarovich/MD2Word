@@ -72,7 +72,17 @@ namespace MD2Word
         }
         public void WriteHyperlink(string label, string url)
         {
-            var uri = new Uri(url);
+            Uri uri;
+            try
+            {
+                uri = new Uri(url);
+            }
+            catch (UriFormatException e)
+            {
+                WriteInlineText(label);
+                WriteInlineText(url);
+                return;
+            }
             var mainPart = _doc.MainDocumentPart;
             var rel = mainPart!.HyperlinkRelationships.FirstOrDefault(hr => hr.Uri == uri) ??
                       mainPart.AddHyperlinkRelationship(uri, true);

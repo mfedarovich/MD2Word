@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using Markdig.Syntax.Inlines;
 
 namespace MD2Word.Markdown.Renderers.InlineRenderers
@@ -11,48 +12,88 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
         
         protected override void Write(DocRenderer renderer, LinkInline link)
         {
-            // link text
-            Document.PushStyle(FontStyles.Caption, true);
-            Document.StartNextParagraph();
-            renderer.WriteChildren(link);
-            Document.PopStyle(true);
-            
-            if (link.Label != null && link.LocalLabel == LocalLabel.Local)
+            if (link.Url == null)
             {
-                Document.WriteText(link.Label);
+                renderer.WriteChildren(link);
+                return;
             }
-            else if (link.Url != null)
+            string caption;
+            if (link.IsImage)
             {
-                if (link.IsImage)
+                if (!string.IsNullOrEmpty(link.Title))
                 {
-                    DrawImage(link);
+                    WriteCaption(link.Title);
+                    renderer.WriteChildren(link);
                 }
                 else
                 {
-                    InsertHyperlink(link);
+                    caption = SerializeChildrenToString(link);
+                    if (caption.Length > 0)
+                        WriteCaption(caption);
                 }
+                DrawImage(link);
+                return;
             }
+
+            if (string.IsNullOrEmpty(link.Url))
+            {
+                renderer.WriteChildren(link);
+                return;
+            }
+            
+            caption = link.Title;
+            if (string.IsNullOrEmpty(caption))
+            {
+                caption = SerializeChildrenToString(link);
+            }
+            else
+            {
+                renderer.WriteChildren(link);
+            }
+            InsertHyperlink(caption, link);
+        }
+        
+        private static string SerializeChildrenToString(ContainerInline containerInline)
+        {
+            if (containerInline is null)
+            {
+                return string.Empty;
+            }
+
+            var sb = new StringBuilder();
+            var inline = containerInline.FirstChild;
+            while (inline != null)
+            {
+                sb.Append((inline as LiteralInline)?.Content.ToString());
+                inline = inline.NextSibling;
+            }
+
+            return sb.ToString();
         }
 
-        private void InsertHyperlink(LinkInline link)
+        private void InsertHyperlink(string label, LinkInline link)
         {
-            var title = link.Title ?? link.Url;
-            Document.WriteHyperlink(link.Url);
+            if (string.IsNullOrEmpty(label))
+                label = link.Url;
+            Document.WriteHyperlink(label, link.Url);
         }
 
         private void DrawImage(LinkInline link)
         {
-            if (!string.IsNullOrEmpty(link.Title))
-            {
-                Document.PushStyle(FontStyles.Caption, true);
-                Document.WriteText(link.Title);
-                Document.PopStyle(true);
-            }
-
+            Document.StartNextParagraph();
             if (File.Exists(link.Url))
                 Document.InsertImageFromFile(link.Url);
             else
                 Document.InsertImageFromUrl(link.Url);
+        }
+
+        private void WriteCaption(string label)
+        {
+            if (string.IsNullOrEmpty(label)) return;
+            
+            Document.PushStyle(FontStyles.Caption, true);
+            Document.WriteInlineText(label);
+            Document.PopStyle(true);
         }
     }
 }
