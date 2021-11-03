@@ -46,6 +46,9 @@ namespace MD2Word.Markdown.Renderers
             ObjectRenderers.Add(new DocHtmlEntityInlineRenderer(document));            
             ObjectRenderers.Add(new DocLinkInlineRenderer(document));
             ObjectRenderers.Add(new DocLiteralInlineRenderer(document));
+            
+            ObjectRenderers.Add(new DocTableRenderer(document));
+            
         }
         
         public override object Render(MarkdownObject markdownObject)

@@ -1,5 +1,5 @@
 ﻿using Markdig;
-using MD2Word.Markdown.Parsers;
+using MD2Word.Markdown;
 using MD2Word.Markdown.Renderers;
 using NUnit.Framework;
 
@@ -17,10 +17,8 @@ namespace MD2Word
             Document = new DocumentStub();
             Renderer = new DocRenderer(Document);
             
-            var pipelineBuilder = new MarkdownPipelineBuilder();
-            pipelineBuilder.BlockParsers.Add(new ExtendedBlockParser());
+            var pipelineBuilder = new DocMarkdownPipelineBuilder();
             Pipeline = pipelineBuilder.Build();
-            
         }
 
         protected void TestOutput(string markdown, string expectedResult)
