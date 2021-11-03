@@ -14,7 +14,7 @@ namespace MD2Word
     public class Document : IDocument
     {
         private readonly WordprocessingDocument _doc;
-        private Paragraph _paragraph;
+        private Paragraph? _paragraph;
         private readonly EmbeddedImage _image;
         private readonly DocStyle _style = new();
 
@@ -195,6 +195,11 @@ namespace MD2Word
 
             var newChild = new Text(text);
             run.AppendChild(newChild);
+        }
+
+        public void Dispose()
+        {
+            _doc?.Dispose();
         }
     }
 }

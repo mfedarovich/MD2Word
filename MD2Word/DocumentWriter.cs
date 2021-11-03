@@ -61,7 +61,7 @@ namespace MD2Word
                 ThrowExceptionIfClosed();
             
             if (!string.IsNullOrEmpty(value)) 
-                _document.WriteText(value);
+                _document.WriteText(value!);
         }
 
         private static void ThrowExceptionIfClosed()

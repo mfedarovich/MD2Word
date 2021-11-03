@@ -85,5 +85,9 @@ namespace MD2Word
         public void Emphasise(bool italic, bool bold)
         {
         }
+
+        public void Dispose()
+        {
+        }
     }
 }

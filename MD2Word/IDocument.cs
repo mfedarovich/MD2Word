@@ -1,8 +1,9 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace MD2Word
 {
-    public interface IDocument
+    public interface IDocument : IDisposable
     {
         void StartNextParagraph();
         TextWriter GetWriter();
