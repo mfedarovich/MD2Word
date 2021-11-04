@@ -29,7 +29,7 @@ Then you can cleanup your template.
 Please see for reference [template example](template_example.docx).
 
 ## Configuration
-All styles from template shall be mapped in the [appsettings.json](MD2Word.App\appsettings.json) like as follow:
+All styles from template shall be mapped in the [appsettings.json](MD2Word.App/appsettings.json) like as follow:
 ```
 {
 "Styles": {
