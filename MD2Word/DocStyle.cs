@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using DocumentFormat.OpenXml;
 
 namespace MD2Word
 {
@@ -59,5 +60,7 @@ namespace MD2Word
             else
                 _paragraphStyles.Pop();
         }
+
+        public string this[FontStyles hyperlink] => _styles[hyperlink];
     }
 }

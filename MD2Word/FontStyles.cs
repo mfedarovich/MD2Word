@@ -9,6 +9,7 @@
         [NesstingStyle(MaxLevel = 4)]
         Heading,
         NumberList,
-        BulletList
+        BulletList,
+        Hyperlink
     }
 }

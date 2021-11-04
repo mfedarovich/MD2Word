@@ -90,7 +90,7 @@ namespace MD2Word
 
             var run = new Run(
                 new RunProperties(
-                    new RunStyle() { Val = "Hyperlink" }),
+                    new RunStyle() { Val = _style[FontStyles.Hyperlink] }),
                 new Text(label)
             );
             run.Emphasise(_style.Italic, _style.Bold);
