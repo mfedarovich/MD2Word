@@ -31,11 +31,9 @@ namespace MD2Word.Word
             var stylePart = doc.MainDocumentPart?.StyleDefinitionsPart;
             if (stylePart?.Styles != null)
             {
-                //var type = forParagraph ? StyleValues.Paragraph : StyleValues.Character;
-                var type = StyleValues.Paragraph;
-                var style = stylePart.Styles.Descendants<StyleName>()
+                 var style = stylePart.Styles.Descendants<StyleName>()
                     .Where(s => string.Compare(s.Val?.Value, styleName, StringComparison.OrdinalIgnoreCase) == 0  &&
-                                ((Style) s.Parent!)?.Type == type)
+                                ((Style) s.Parent!)?.Type == StyleValues.Paragraph)
                     .Select(n => ((Style) n.Parent!)).FirstOrDefault();
 
                 if (!forParagraph && style?.LinkedStyle != null)
