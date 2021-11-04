@@ -8,28 +8,13 @@ namespace MD2Word
     {
         private readonly Stack<Tuple<FontStyles, int>> _paragraphStyles = new();
         private readonly Stack<FontStyles> _inlineStyles = new();
-        private readonly Dictionary<FontStyles, string> _converter = new();
+        private readonly Dictionary<FontStyles, string> _styles;
 
-        public DocStyle()
+        public DocStyle(Dictionary<FontStyles, string> styles)
         {
             _paragraphStyles.Push(new Tuple<FontStyles, int>(FontStyles.BodyText, 0));
             _inlineStyles.Push(FontStyles.BodyText);
-            
-            // TODO:
-            // _converter.Add(FontStyles.BodyText, "Body Text");
-            // _converter.Add(FontStyles.CodeText, "Code Text");
-            // _converter.Add(FontStyles.Caption, "Caption_style");
-            // _converter.Add(FontStyles.CodeBlock, "Code");
-            // _converter.Add(FontStyles.Heading, "Heading {0}");
-            // _converter.Add(FontStyles.NumberList, "List Number");
-            // _converter.Add(FontStyles.BulletList, "List Bullet");
-            _converter.Add(FontStyles.BodyText, "Normal");
-            _converter.Add(FontStyles.CodeText, "Code Text");
-            _converter.Add(FontStyles.Caption, "Subtitle");
-            _converter.Add(FontStyles.CodeBlock, "Code");
-            _converter.Add(FontStyles.Heading, "Heading {0}");
-            _converter.Add(FontStyles.NumberList, "List Number");
-            _converter.Add(FontStyles.BulletList, "List Bullet");
+            _styles = styles;
         }
 
         public string ParagraphName
@@ -38,15 +23,15 @@ namespace MD2Word
             {
                 var style = _paragraphStyles.Peek();
                 if (style.Item2 == 0)
-                    return _converter[style.Item1];
+                    return _styles[style.Item1];
                 
                 
                 var maxLevel = style.Item1.GetType().GetCustomAttribute<NesstingStyleAttribute>()?.MaxLevel ?? int.MaxValue;
-                return string.Format(_converter[style.Item1], Math.Min(style.Item2, maxLevel));
+                return string.Format(_styles[style.Item1], Math.Min(style.Item2, maxLevel));
             }
         }
 
-        public string InlineName => _converter[Inline];
+        public string InlineName => _styles[Inline];
         
         public FontStyles Paragraph => _paragraphStyles.Peek().Item1;
         public FontStyles Inline => _inlineStyles.Peek();

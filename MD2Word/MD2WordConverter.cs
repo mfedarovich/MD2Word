@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using DocumentFormat.OpenXml.Packaging;
 using MD2Word.Markdown;
 using MD2Word.Markdown.Renderers;
@@ -8,14 +9,16 @@ namespace MD2Word
 {
     public class Md2WordConverter
     {
+        private readonly Dictionary<FontStyles, string> _styles;
         public string WordTemplateFile { get; }
         public string MarkdownFile { get; }
 
         public string? OutputFileName { get; set; }
         public string? OutputDirectory { get; set; }
 
-        public Md2WordConverter(string markdownFile, string wordTemplateFile)
+        public Md2WordConverter(string markdownFile, string wordTemplateFile, Dictionary<FontStyles, string> styles)
         {
+            _styles = styles;
             MarkdownFile = markdownFile;
             WordTemplateFile = wordTemplateFile;
         }
@@ -39,7 +42,7 @@ namespace MD2Word
             var documentFile = PrepareDocument();
             var wordDocument = WordprocessingDocument.Open(documentFile, true);
             wordDocument.SetUpdateFieldsOnOpen();
-            return new Document(wordDocument);
+            return new Document(wordDocument, _styles);
         }
 
         private string PrepareDocument()

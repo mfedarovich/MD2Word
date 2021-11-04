@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -16,12 +17,13 @@ namespace MD2Word
         private readonly WordprocessingDocument _doc;
         private Paragraph? _paragraph;
         private readonly EmbeddedImage _image;
-        private readonly DocStyle _style = new();
+        private readonly DocStyle _style;
 
-        public Document(WordprocessingDocument doc)
+        public Document(WordprocessingDocument doc, Dictionary<FontStyles, string> styles)
         {
             _doc = doc;
             _image = new EmbeddedImage(doc, 500);
+            _style = new DocStyle(styles);
         }
 
         public void StartNextParagraph()
