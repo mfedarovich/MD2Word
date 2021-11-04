@@ -14,7 +14,7 @@ namespace MD2Word
         [Option('o', "output", Required = false, HelpText = "[Optional]: Output file name, shall be specified if output name shall differ from markdown file")]
         public string? OutputFile { get; set; }
         
-        [Option('d', "dir", Required = false, HelpText = "Output directory, otherwise document will be generated nearby markdown file")]
+        [Option('d', "dir", Required = false, HelpText = "[Optional]: Output directory, otherwise document will be generated nearby markdown file")]
         public string? OutputDirectory { get; set; }
     }
 }
