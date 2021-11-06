@@ -21,8 +21,8 @@ namespace MD2Word.Word
 
         public static void SetUpdateFieldsOnOpen(this WordprocessingDocument doc)
         {
-            var settingsPart = doc.MainDocumentPart.DocumentSettingsPart;
-            settingsPart.Settings.Append(new UpdateFieldsOnOpen() { Val = true });
+            var settingsPart = doc.MainDocumentPart?.DocumentSettingsPart;
+            settingsPart?.Settings.Append(new UpdateFieldsOnOpen { Val = true });
         }
         public static string FindStyleIdByName(this WordprocessingDocument doc, string styleName, bool forParagraph = true)
         {         
@@ -33,12 +33,12 @@ namespace MD2Word.Word
             {
                  var style = stylePart.Styles.Descendants<StyleName>()
                     .Where(s => string.Compare(s.Val?.Value, styleName, StringComparison.OrdinalIgnoreCase) == 0  &&
-                                ((Style) s.Parent!)?.Type == StyleValues.Paragraph)
+                                ((Style) s.Parent!)?.Type! == StyleValues.Paragraph)
                     .Select(n => ((Style) n.Parent!)).FirstOrDefault();
 
                 if (!forParagraph && style?.LinkedStyle != null)
                 {
-                    styleId = style.LinkedStyle.Val.Value;
+                    styleId = style.LinkedStyle.Val?.Value;
                 }
                 else
                 {

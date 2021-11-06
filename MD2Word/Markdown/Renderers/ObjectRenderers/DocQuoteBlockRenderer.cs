@@ -23,10 +23,9 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
                 var wsa = quoteLine.TriviaAfter.ToString();
                 indents[i] = (wsb + quoteChar + spaceAfterQuoteChar + wsa);
             }
-            bool noChildren = false;
+
             if (quoteBlock.Count == 0)
             {
-                noChildren = true;
                 // since this QuoteBlock instance has no children, indents will not be rendered. We
                 // work around this by adding empty LineBreakInlines to a ParagraphBlock.
                 // Wanted: a more elegant/better solution (although this is not *that* bad).

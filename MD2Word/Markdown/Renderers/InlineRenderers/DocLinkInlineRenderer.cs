@@ -22,7 +22,7 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
             {
                 if (!string.IsNullOrEmpty(link.Title))
                 {
-                    WriteCaption(link.Title);
+                    WriteCaption(link.Title!);
                     renderer.WriteChildren(link);
                 }
                 else
@@ -41,7 +41,7 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
                 return;
             }
             
-            caption = link.Title;
+            caption = link.Title!;
             if (string.IsNullOrEmpty(caption))
             {
                 caption = SerializeChildrenToString(link);
@@ -55,11 +55,6 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
         
         private static string SerializeChildrenToString(ContainerInline containerInline)
         {
-            if (containerInline is null)
-            {
-                return string.Empty;
-            }
-
             var sb = new StringBuilder();
             var inline = containerInline.FirstChild;
             while (inline != null)
@@ -74,17 +69,17 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
         private void InsertHyperlink(string label, LinkInline link)
         {
             if (string.IsNullOrEmpty(label))
-                label = link.Url;
-            Document.WriteHyperlink(label, link.Url);
+                label = link.Url!;
+            Document.WriteHyperlink(label, link.Url!);
         }
 
         private void DrawImage(LinkInline link)
         {
             Document.StartNextParagraph();
             if (File.Exists(link.Url))
-                Document.InsertImageFromFile(link.Url);
+                Document.InsertImageFromFile(link.Url!);
             else
-                Document.InsertImageFromUrl(link.Url);
+                Document.InsertImageFromUrl(link.Url!);
         }
 
         private void WriteCaption(string label)

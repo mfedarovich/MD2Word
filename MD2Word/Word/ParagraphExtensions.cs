@@ -11,5 +11,21 @@ namespace MD2Word.Word
                       paragraph.PrependChild(new ParagraphProperties());
             pPr.ParagraphStyleId = new ParagraphStyleId(){Val = styleId};
         }
+
+        public static void Align(this Paragraph paragraph, Alignment align)
+        {
+            ParagraphProperties paraProperties = new();
+            Justification justification = new();
+            justification.Val = align switch
+            {
+                Alignment.Center => JustificationValues.Center,
+                Alignment.Right => JustificationValues.Right,
+                Alignment.Left => JustificationValues.Left,
+                _ => justification.Val
+            };
+
+            paraProperties.Append(justification);
+            paragraph.Append(paraProperties);
+        }
     }
 }

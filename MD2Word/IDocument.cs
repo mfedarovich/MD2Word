@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Data;
 using System.IO;
 
 namespace MD2Word
 {
     public interface IDocument : IDisposable
     {
+        ITable CreateTable();
+
         void StartNextParagraph();
         TextWriter GetWriter();
         void WriteText(string text);

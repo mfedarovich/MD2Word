@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Text;
+using FakeItEasy;
 
 namespace MD2Word
 {
@@ -8,6 +9,12 @@ namespace MD2Word
         StringBuilder _executionLog = new StringBuilder();
 
         public string Result => _executionLog.ToString();
+
+        public ITable CreateTable()
+        {
+            _executionLog.Append("{table}");
+            return A.Fake<ITable>();
+        }
 
         public void StartNextParagraph()
         {

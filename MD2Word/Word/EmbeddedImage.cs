@@ -21,7 +21,7 @@ namespace MD2Word.Word
             _windowWidth = windowWidth;
         }
 
-        public void AddImage(Paragraph paragraph, byte[] buffer)
+        public void AddImage(OpenXmlElement parent, byte[] buffer)
         {
             var mainPart = _document.MainDocumentPart;
             var imagePart = mainPart!.AddImagePart(ImagePartType.Png);
@@ -30,12 +30,12 @@ namespace MD2Word.Word
                 imagePart.FeedData(stream);
                 using (var img = Image.FromStream(stream))
                 {
-                    AddImageToBody(paragraph, mainPart.GetIdOfPart(imagePart), img.Width, img.Height);
+                    AddImageToBody(parent, mainPart.GetIdOfPart(imagePart), img.Width, img.Height);
                 }
             }
         }
         
-        private void AddImageToBody(Paragraph paragraph, string relationshipId, long width, long height)
+        private void AddImageToBody(OpenXmlElement parent, string relationshipId, long width, long height)
         {
             // Define the reference of the image.
             var cx = Math.Min(PixelsToEmu(width), PixelsToEmu(_windowWidth));
@@ -76,7 +76,7 @@ namespace MD2Word.Word
                          DistanceFromLeft = (UInt32Value)0U, 
                          DistanceFromRight = (UInt32Value)0U, EditId = "50D07946" });
 
-            paragraph.Append(new Run(element));
+            parent.Append(new Run(element));
         }
         
         public static long PixelsToEmu(long pixels)

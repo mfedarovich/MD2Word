@@ -8,6 +8,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using MD2Word.Word;
+using MD2Word.Word.Tables;
 using PlantUml.Net;
 
 namespace MD2Word
@@ -15,7 +16,7 @@ namespace MD2Word
     public class Document : IDocument
     {
         private readonly WordprocessingDocument _doc;
-        private Paragraph? _paragraph;
+        private OpenXmlElement? _parent;
         private readonly EmbeddedImage _image;
         private readonly DocStyle _style;
 
@@ -26,10 +27,16 @@ namespace MD2Word
             _style = new DocStyle(styles);
         }
 
+        public ITable CreateTable()
+        {
+            return new DocTable(_doc.MainDocumentPart?.Document.Body!, (newParent) => _parent = newParent);
+        }
+
         public void StartNextParagraph()
         {
-            _paragraph = CreateParagraphAfter(_paragraph);
-            _paragraph.ApplyStyleId(_doc.FindStyleIdByName(_style.ParagraphName));
+            var paragraph = CreateParagraphAfter(_parent);
+            paragraph.ApplyStyleId(_doc.FindStyleIdByName(_style.ParagraphName));
+            _parent = paragraph;
         }
 
         public TextWriter GetWriter()
@@ -39,7 +46,7 @@ namespace MD2Word
         
         public void WriteText(string text)
         {
-            AppendText(_paragraph, text);
+            AppendText(_parent!, text);
         }
         
         public void WriteInlineText(string text)
@@ -48,7 +55,7 @@ namespace MD2Word
             run.ApplyInlineStyle(_doc, _style)
                 .Emphasise(_style.Italic, _style.Bold)
                 .AppendText(text, true);
-            _paragraph.AppendChild(run);
+            _parent?.AppendChild(run);
         }
 
         public void WriteSymbol(string htmlSymbol)
@@ -60,12 +67,12 @@ namespace MD2Word
                 .Emphasise(_style.Italic, _style.Bold)
                 .AppendSymbol(symbol);
             
-            _paragraph.AppendChild(run);
+            _parent?.AppendChild(run);
         }
 
         public void WriteLine()
         {
-            _paragraph.AppendChild(new Run(new Break()));
+            _parent?.AppendChild(new Run(new Break()));
         }
         public void WriteHyperlink(string url)
         {
@@ -78,7 +85,7 @@ namespace MD2Word
             {
                 uri = new Uri(url);
             }
-            catch (UriFormatException e)
+            catch (UriFormatException)
             {
                 WriteInlineText(label);
                 WriteInlineText(url);
@@ -98,7 +105,7 @@ namespace MD2Word
             var hl = new Hyperlink(
                 new ProofError() { Type = ProofingErrorValues.GrammarStart },
                 run) { History = OnOffValue.FromBoolean(true), Id = rel.Id };
-            _paragraph.AppendChild(hl);
+            _parent?.AppendChild(hl);
         }
 
         public void Emphasise(bool italic, bool bold)
@@ -109,7 +116,7 @@ namespace MD2Word
 
         public void WriteHtml(string html)
         {
-            _paragraph = CreateParagraphAfter(_paragraph);
+            _parent = CreateParagraphAfter(_parent);
             string altChunkId = $"codeId_{html.GetHashCode()}";
             // var run = new Run(new Text("test"));
             // var p = new Paragraph(new ParagraphProperties(
@@ -124,10 +131,12 @@ namespace MD2Word
             //ms.Seek(0, SeekOrigin.Begin);
 
             // Feed HTML data into format import part (chunk).
-            formatImportPart.FeedData(ms);
-            AltChunk altChunk = new AltChunk();
-            altChunk.Id = altChunkId;
-            _paragraph.Append(altChunk);
+            formatImportPart?.FeedData(ms);
+            AltChunk altChunk = new()
+            {
+                Id = altChunkId
+            };
+            _parent.Append(altChunk);
         }
 
         public void PushStyle(FontStyles style, bool inline)
@@ -147,8 +156,8 @@ namespace MD2Word
 
         public void InsertPngImage(byte[] buffer)
         {
-            _paragraph = CreateParagraphAfter(_paragraph);
-            _image.AddImage(_paragraph, buffer);
+            _parent = CreateParagraphAfter(_parent);
+            _image.AddImage(_parent, buffer);
         }
 
         public void InsertImageFromFile(string fileName)
