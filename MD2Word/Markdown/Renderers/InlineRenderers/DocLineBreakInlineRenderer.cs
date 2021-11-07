@@ -11,7 +11,8 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
 
         protected override void Write(DocRenderer renderer, LineBreakInline obj)
         {
-            Document.WriteLine();
+            using var inline = Document.CreateInline();
+            inline.WriteLine();
         }
     }
 }

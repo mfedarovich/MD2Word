@@ -7,7 +7,12 @@ namespace MD2Word
     [TestFixture]
     public class InlineLinkTests : BaseTest
     {
-        [TestCase("[](url)", "url", "url")]
+        [TestCase("[](url)", "url")]
+        public void Test(string value, string url)
+        {
+            TestOutput(value, $"p\r\nh:{url}");
+        }
+
         [TestCase("[description](url)", "description", "url")]
         public void Test(string value, string description, string url)
         {

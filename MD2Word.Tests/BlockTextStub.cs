@@ -25,7 +25,7 @@ namespace MD2Word
 
         public void WriteHyperlink(string label, string url)
         {
-            Log.Append($"h:{url}");
+            Log.Append(label == url ? $"h:{url}" : $"h:{label}-{url}");
         }
 
         public void Dispose()

@@ -8,9 +8,8 @@ namespace MD2Word.Word.Blocks
 {
     public class DocInline : DocBlockText, IInline
     {
-        private readonly Run _run;
-
-        public DocInline(WordprocessingDocument document, OpenXmlElement parent, Dictionary<FontStyles, string> styles) : base(document, parent, styles)
+        public DocInline(WordprocessingDocument document, OpenXmlElement parent, Dictionary<FontStyles, string> styles) : base(document, parent, styles,
+            () => {})
         {
         }
         

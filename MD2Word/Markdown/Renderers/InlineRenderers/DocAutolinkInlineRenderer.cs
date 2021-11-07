@@ -11,7 +11,8 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
         }
         protected override void Write(DocRenderer renderer, AutolinkInline obj)
         {
-            Document.WriteHyperlink(obj.Url);
+            using var inline = Document.CreateInline();
+            inline.WriteHyperlink(obj.Url, obj.Url);
         }
     }
 }

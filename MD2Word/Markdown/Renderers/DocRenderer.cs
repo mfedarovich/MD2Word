@@ -75,14 +75,9 @@ namespace MD2Word.Markdown.Renderers
         }
         
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Write(char content)
-        {
-            _document.GetWriter().Write(content);
-        }
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public void Write(string? content)
         {
-            _document.WriteText(content!);
+            _document.Writer.WriteText(content!);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -125,7 +120,7 @@ namespace MD2Word.Markdown.Renderers
                 content = new string(_buffer, offset, length);
             }
 
-            _document.WriteText(content);
+            _document.Writer.WriteText(content);
 #endif
         }
         

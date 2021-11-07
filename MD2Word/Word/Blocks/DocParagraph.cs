@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using MD2Word.Word.Extensions;
@@ -9,7 +10,14 @@ namespace MD2Word.Word.Blocks
     {
         private readonly Paragraph _paragraph;
 
-        public DocParagraph(WordprocessingDocument document, Paragraph paragraph, Dictionary<FontStyles, string> styles) : base(document, paragraph, styles)
+        public DocParagraph(WordprocessingDocument document, Paragraph paragraph, Dictionary<FontStyles, string> styles, Action onDestroy) : 
+            base(document, paragraph, styles, onDestroy)
+        {
+            _paragraph = paragraph;
+        }
+
+        public DocParagraph(WordprocessingDocument document, Paragraph paragraph, DocStyle style, Action onDestroy) : 
+            base(document, paragraph, style, onDestroy)
         {
             _paragraph = paragraph;
         }

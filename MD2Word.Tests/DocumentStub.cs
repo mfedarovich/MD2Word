@@ -7,7 +7,7 @@ namespace MD2Word
     public class DocumentStub : IDocument
     {
         private readonly StringBuilder _executionLog = new StringBuilder();
-        private IDocumentWriter _writer;
+        public IDocumentWriter Writer { get; private set; }
 
         public string Result => _executionLog.ToString();
 
@@ -19,39 +19,19 @@ namespace MD2Word
 
         public IParagraph CreateParagraph()
         {
-            _writer = new ParagraphStub(_executionLog); 
-            return (IParagraph)_writer;
+            Writer = new ParagraphStub(_executionLog); 
+            return (IParagraph)Writer;
         }
 
         public IInline CreateInline()
         {
-            _writer = new InlineStub(_executionLog);
-            return (IInline)_writer;
+            Writer = new InlineStub(_executionLog);
+            return (IInline)Writer;
         }
         
         public TextWriter GetWriter()
         {
             return new DocumentWriter(this);
-        }
-
-        public void WriteText(string text)
-        {
-            _writer.WriteText(text);
-        }
-
-        public void WriteHyperlink(string label, string url)
-        {
-            _executionLog.Append($"h:{label}-{url}");
-        }
-
-        public void WriteSymbol(string htmlSymbol)
-        {
-            _writer.WriteSymbol(htmlSymbol);
-        }
-
-        public void WriteLine()
-        {
-            _writer.WriteLine();
         }
         public void InsertImageFromFile(string fileName)
         {
@@ -66,11 +46,6 @@ namespace MD2Word
         public void InsertUml(string umlScript)
         {
             _executionLog.AppendLine("image from UML");
-        }
-
-        public void WriteHyperlink(string url)
-        {
-            _writer.WriteHyperlink(url, url);
         }
         public void Dispose()
         {

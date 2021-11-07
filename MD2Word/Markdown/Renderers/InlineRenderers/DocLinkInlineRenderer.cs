@@ -68,9 +68,10 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
 
         private void InsertHyperlink(string label, LinkInline link)
         {
+            using var inline = Document.CreateInline();
             if (string.IsNullOrEmpty(label))
                 label = link.Url!;
-            Document.WriteHyperlink(label, link.Url!);
+            inline.WriteHyperlink(label, link.Url!);
         }
 
         private void DrawImage(LinkInline link)

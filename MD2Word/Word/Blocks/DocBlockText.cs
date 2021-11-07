@@ -8,17 +8,25 @@ using MD2Word.Word.Extensions;
 
 namespace MD2Word.Word.Blocks
 {
-    public abstract class DocBlockText : IBlockText, IDocumentWriter
+    public abstract class DocBlockText : IBlockText
     {
+        private readonly Action _onDestroy;
         protected WordprocessingDocument Document { get; }
         protected OpenXmlElement Parent { get; }
-        protected DocStyle Style { get; }
+        public DocStyle Style { get; }
 
-        protected DocBlockText(WordprocessingDocument document, OpenXmlElement parent, Dictionary<FontStyles, string> styles)
+        protected DocBlockText(WordprocessingDocument document, OpenXmlElement parent,
+            Dictionary<FontStyles, string> styles, Action onDestroy) : this(document, parent, new DocStyle(styles), onDestroy)
         {
+        }
+        
+        protected DocBlockText(WordprocessingDocument document, OpenXmlElement parent,
+            DocStyle docStyle, Action onDestroy)
+        {
+            _onDestroy = onDestroy;
             Document = document;
             Parent = parent;
-            Style = new DocStyle(styles);
+            Style = docStyle;
         }
 
         public virtual void SetStyle(FontStyles style, int level)
@@ -108,7 +116,7 @@ namespace MD2Word.Word.Blocks
         
         public void Dispose()
         {
-            
+            _onDestroy();
         }
     }
 }

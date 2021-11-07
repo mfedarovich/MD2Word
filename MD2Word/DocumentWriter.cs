@@ -36,7 +36,7 @@ namespace MD2Word
             if (!_isOpen) 
                 ThrowExceptionIfClosed();
             
-            _document.WriteText(value.ToString());
+            _document.Writer.WriteText(value.ToString());
         }
 
         public override void Write(char[] buffer, int index, int count) { 
@@ -52,7 +52,7 @@ namespace MD2Word
             if (buffer.Length - index < count) 
                 throw new ArgumentException("off len");
  
-            _document.WriteText(new string(buffer, index, count));
+            _document.Writer.WriteText(new string(buffer, index, count));
         }
 
         public override void Write(string? value) 
@@ -61,7 +61,7 @@ namespace MD2Word
                 ThrowExceptionIfClosed();
             
             if (!string.IsNullOrEmpty(value)) 
-                _document.WriteText(value!);
+                _document.Writer.WriteText(value!);
         }
 
         private static void ThrowExceptionIfClosed()

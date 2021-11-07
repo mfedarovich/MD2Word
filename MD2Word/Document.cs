@@ -18,8 +18,10 @@ namespace MD2Word
         private readonly Dictionary<FontStyles, string> _styles;
         private OpenXmlElement? _current;
         private readonly EmbeddedImage _image;
-        private IDocumentWriter _writer;
-   
+        private readonly Stack<DocStyle> _styleHistory = new();
+
+        public IDocumentWriter? Writer { get; private set; } 
+
         public Document(WordprocessingDocument doc, Dictionary<FontStyles, string> styles)
         {
             _doc = doc;
@@ -35,8 +37,21 @@ namespace MD2Word
         public IParagraph CreateParagraph()
         {
             var paragraph = CreateParagraphAfter();
-            var docParagraph = new DocParagraph(_doc, paragraph, _styles);
-            _writer = docParagraph;
+            DocParagraph docParagraph;
+         
+            void OnDestroy() => _styleHistory.Pop();
+            if (_styleHistory.Count == 0)
+            {
+                docParagraph = new DocParagraph(_doc, paragraph, _styles, OnDestroy);
+            }
+            else
+            {
+                docParagraph = new DocParagraph(_doc, paragraph, (DocStyle)(_styleHistory.Peek()).Clone(),
+                    OnDestroy);
+            }
+            
+            Writer = docParagraph;
+            _styleHistory.Push(docParagraph.Style);
             return docParagraph;
         }
 
@@ -45,7 +60,7 @@ namespace MD2Word
             if (Current.IsPlaceholder()) throw new FormatException("No paragraph is created before");
             
             var docInline = new DocInline(_doc, Current, _styles);
-            _writer = docInline;
+            Writer = docInline;
             return docInline;
         }
 
@@ -55,29 +70,6 @@ namespace MD2Word
             return new DocumentWriter(this);
         }
         
-        public void WriteText(string text)
-        {
-            _writer.WriteText(text);
-        }
-        
-        public void WriteSymbol(string htmlSymbol)
-        {
-            _writer.WriteSymbol(htmlSymbol);
-        }
-
-        public void WriteLine()
-        {
-            _writer.WriteLine();
-        }
-        public void WriteHyperlink(string url)
-        {
-            WriteHyperlink(url,url);
-        }
-        public void WriteHyperlink(string label, string url)
-        {
-            _writer.WriteHyperlink(label, url);
-        }
-
         public void InsertPngImage(byte[] buffer)
         {
             CreateParagraphAfter();
@@ -106,7 +98,7 @@ namespace MD2Word
             var buffer = plantUmlRenderer.Render(umlScript, OutputFormat.Png);
             InsertPngImage(buffer);
         }
-
+        
         private OpenXmlElement Current
         {
             get =>_current ?? _doc.GetBodyPlaceholder();

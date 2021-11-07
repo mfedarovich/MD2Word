@@ -10,7 +10,6 @@ namespace MD2Word.Word.Extensions
         public static Run ApplyInlineStyle(this Run run, WordprocessingDocument doc, DocStyle style)
         {
             run.ApplyStyleId(doc.FindStyleIdByName(style.Name, false));
-
             return run;
         }
         public static Run AppendText(this Run run, string text, bool preserveSpace = false)
