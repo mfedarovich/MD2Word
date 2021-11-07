@@ -12,7 +12,7 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
         protected override void Write(DocRenderer renderer, HeadingBlock obj)
         {
             Document.PushStyle(FontStyles.Heading, obj.Level);
-            Document.StartNextParagraph();
+            Document.CreateParagraph();
             renderer.WriteLeafInline(obj);
             
             Document.PopStyle(false);

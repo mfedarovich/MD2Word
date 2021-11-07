@@ -16,7 +16,7 @@ namespace MD2Word
             return A.Fake<ITable>();
         }
 
-        public void StartNextParagraph()
+        public void CreateParagraph()
         {
             _executionLog.AppendLine("p");
         }

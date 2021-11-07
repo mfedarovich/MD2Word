@@ -75,7 +75,7 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
 
         private void DrawImage(LinkInline link)
         {
-            Document.StartNextParagraph();
+            Document.CreateParagraph();
             if (File.Exists(link.Url))
                 Document.InsertImageFromFile(link.Url!);
             else

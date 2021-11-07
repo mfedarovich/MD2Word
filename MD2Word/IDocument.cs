@@ -8,7 +8,7 @@ namespace MD2Word
     {
         ITable CreateTable();
 
-        void StartNextParagraph();
+        void CreateParagraph();
         TextWriter GetWriter();
         void WriteText(string text);
         void WriteInlineText(string text);

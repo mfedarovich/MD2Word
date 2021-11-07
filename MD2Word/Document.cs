@@ -13,6 +13,7 @@ using PlantUml.Net;
 
 namespace MD2Word
 {
+    
     public class Document : IDocument
     {
         private readonly WordprocessingDocument _doc;
@@ -32,7 +33,7 @@ namespace MD2Word
             return new DocTable(_doc.MainDocumentPart?.Document.Body!, (newParent) => _parent = newParent);
         }
 
-        public void StartNextParagraph()
+        public void CreateParagraph()
         {
             var paragraph = CreateParagraphAfter(_parent);
             paragraph.ApplyStyleId(_doc.FindStyleIdByName(_style.ParagraphName));

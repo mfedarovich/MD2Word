@@ -12,7 +12,7 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
         protected override void Write(DocRenderer renderer, CodeBlock obj)
         {
             Document.PushStyle(FontStyles.CodeBlock, true);
-            Document.StartNextParagraph();
+            Document.CreateParagraph();
 
             foreach (var line in obj.Lines)
             {
