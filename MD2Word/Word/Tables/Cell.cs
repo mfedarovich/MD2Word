@@ -1,6 +1,7 @@
 ﻿using System;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
+using MD2Word.Word.Extensions;
 
 namespace MD2Word.Word.Tables
 {

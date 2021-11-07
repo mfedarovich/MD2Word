@@ -10,13 +10,12 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
 
         protected override void Write(DocRenderer renderer, CodeInline obj)
         {
-            Document.PushStyle(FontStyles.CodeText, true);
+            using var inline = Document.CreateInline();
+            inline.SetStyle(FontStyles.CodeText);
             if (obj.Content is { Length: > 0 })
             {
-                renderer.Write(obj.ContentWithTrivia, true);
+                renderer.Write(obj.ContentWithTrivia);
             }
-
-            Document.PopStyle(true);
         }
     }
 }

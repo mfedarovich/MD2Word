@@ -20,10 +20,12 @@ namespace MD2Word
         public void TestEmphasisProperties(string value)
         {
             var document = A.Fake<IDocument>();
+            var inline = A.Fake<IInline>();
+            A.CallTo(() => document.CreateInline()).Returns(inline);
 
             Markdig.Markdown.Convert(value, new DocRenderer(document), Pipeline);
 
-            A.CallTo(() => document.Emphasise(A<bool>.That.IsEqualTo(true), A<bool>.That.IsEqualTo(false))).MustHaveHappened();
+            A.CallTo(() => inline.Emphasise(A<bool>.That.IsEqualTo(true), A<bool>.That.IsEqualTo(false))).MustHaveHappened();
         }
 
         [TestCase("__t__")]
@@ -42,10 +44,12 @@ namespace MD2Word
         public void TestStrongEmphasisProperties(string value)
         {
             var document = A.Fake<IDocument>();
+            var inline = A.Fake<IInline>();
+            A.CallTo(() => document.CreateInline()).Returns(inline);
 
             Markdig.Markdown.Convert(value, new DocRenderer(document), Pipeline);
 
-            A.CallTo(() => document.Emphasise(A<bool>.That.IsEqualTo(false), A<bool>.That.IsEqualTo(true))).MustHaveHappened();
+            A.CallTo(() => inline.Emphasise(A<bool>.That.IsEqualTo(false), A<bool>.That.IsEqualTo(true))).MustHaveHappened();
         }
 
         [TestCase("___t___")]
@@ -64,10 +68,12 @@ namespace MD2Word
         public void TestBothEmphasisProperties(string value)
         {
             var document = A.Fake<IDocument>();
+            var inline = A.Fake<IInline>();
+            A.CallTo(() => document.CreateInline()).Returns(inline);
 
             Markdig.Markdown.Convert(value, new DocRenderer(document), Pipeline);
 
-            A.CallTo(() => document.Emphasise(A<bool>.That.IsEqualTo(true), A<bool>.That.IsEqualTo(true))).MustHaveHappened();
+            A.CallTo(() => inline.Emphasise(A<bool>.That.IsEqualTo(true), A<bool>.That.IsEqualTo(true))).MustHaveHappened();
         }
 
     }

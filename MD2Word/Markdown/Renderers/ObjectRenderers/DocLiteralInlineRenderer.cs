@@ -10,7 +10,8 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, LiteralInline obj)
         {
-            renderer.Write(ref obj.Content, true);
+            using var inline = Document.CreateInline();
+            renderer.Write(ref obj.Content);
         }
     }
 }

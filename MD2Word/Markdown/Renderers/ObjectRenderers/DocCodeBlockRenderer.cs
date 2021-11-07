@@ -11,8 +11,9 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, CodeBlock obj)
         {
-            Document.PushStyle(FontStyles.CodeBlock, true);
-            Document.CreateParagraph();
+            using var paragraph = Document.CreateParagraph();
+            using var inline = Document.CreateInline();
+            inline.SetStyle(FontStyles.CodeBlock);
 
             foreach (var line in obj.Lines)
             {
@@ -20,11 +21,10 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
                 if (!string.IsNullOrEmpty(lineOfCode))
                 {
-                    Document.WriteInlineText(lineOfCode);
-                    Document.WriteLine();
+                    inline.WriteText(lineOfCode);
+                    inline.WriteLine();
                 }
             }
-            Document.PopStyle(true);
         }
     }
 }

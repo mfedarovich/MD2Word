@@ -10,7 +10,8 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
 
         protected override void Write(DocRenderer renderer, HtmlInline obj)
         {
-            Document.WriteSymbol(obj.Tag);
+            using var inline = Document.CreateInline();
+            inline.WriteSymbol(obj.Tag);
         }
     }
 }

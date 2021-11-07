@@ -4,6 +4,7 @@ using DocumentFormat.OpenXml.Packaging;
 using MD2Word.Markdown;
 using MD2Word.Markdown.Renderers;
 using MD2Word.Word;
+using MD2Word.Word.Extensions;
 
 namespace MD2Word
 {

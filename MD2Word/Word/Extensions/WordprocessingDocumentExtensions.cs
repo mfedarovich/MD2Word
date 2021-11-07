@@ -4,7 +4,7 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 
-namespace MD2Word.Word
+namespace MD2Word.Word.Extensions
 {
     public static class Extensions
     {

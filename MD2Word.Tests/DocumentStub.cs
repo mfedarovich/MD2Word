@@ -6,7 +6,8 @@ namespace MD2Word
 {
     public class DocumentStub : IDocument
     {
-        StringBuilder _executionLog = new StringBuilder();
+        private readonly StringBuilder _executionLog = new StringBuilder();
+        private IDocumentWriter _writer;
 
         public string Result => _executionLog.ToString();
 
@@ -16,11 +17,18 @@ namespace MD2Word
             return A.Fake<ITable>();
         }
 
-        public void CreateParagraph()
+        public IParagraph CreateParagraph()
         {
-            _executionLog.AppendLine("p");
+            _writer = new ParagraphStub(_executionLog); 
+            return (IParagraph)_writer;
         }
 
+        public IInline CreateInline()
+        {
+            _writer = new InlineStub(_executionLog);
+            return (IInline)_writer;
+        }
+        
         public TextWriter GetWriter()
         {
             return new DocumentWriter(this);
@@ -28,12 +36,7 @@ namespace MD2Word
 
         public void WriteText(string text)
         {
-            _executionLog.AppendLine($"t:{text}");
-        }
-
-        public void WriteInlineText(string text)
-        {
-            _executionLog.Append($"[{text}]");
+            _writer.WriteText(text);
         }
 
         public void WriteHyperlink(string label, string url)
@@ -43,32 +46,13 @@ namespace MD2Word
 
         public void WriteSymbol(string htmlSymbol)
         {
-            WriteInlineText(htmlSymbol);
+            _writer.WriteSymbol(htmlSymbol);
         }
 
         public void WriteLine()
         {
-            _executionLog.AppendLine();
+            _writer.WriteLine();
         }
-        
-        public void PushStyle(FontStyles style, bool inline)
-        {
-            _executionLog.Append("{");
-            if (inline)
-                _executionLog.Append("i");
-            _executionLog.AppendFormat("{0}}}", style.ToString().ToUpper());
-        }
-
-        public void PushStyle(FontStyles style, int nestingLevel)
-        {
-            _executionLog.AppendFormat("{{{0}#{1}}}", style, nestingLevel);
-        }
-
-        public void PopStyle(bool inline)
-        {
-            _executionLog.Append("{!}");
-        }
-        
         public void InsertImageFromFile(string fileName)
         {
             _executionLog.AppendLine($"img-file:{fileName}");
@@ -86,13 +70,8 @@ namespace MD2Word
 
         public void WriteHyperlink(string url)
         {
-            _executionLog.Append($"h:{url}");
+            _writer.WriteHyperlink(url, url);
         }
-
-        public void Emphasise(bool italic, bool bold)
-        {
-        }
-
         public void Dispose()
         {
         }

@@ -85,10 +85,10 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
         private void WriteCaption(string label)
         {
             if (string.IsNullOrEmpty(label)) return;
-            
-            Document.PushStyle(FontStyles.Caption, true);
-            Document.WriteInlineText(label);
-            Document.PopStyle(true);
+
+            using var inline = Document.CreateInline();
+            inline.SetStyle(FontStyles.Caption);
+            inline.WriteText(label);
         }
     }
 }

@@ -3,13 +3,13 @@ using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 
-namespace MD2Word.Word
+namespace MD2Word.Word.Extensions
 {
     public static class RunExtensions
     {
         public static Run ApplyInlineStyle(this Run run, WordprocessingDocument doc, DocStyle style)
         {
-            run.ApplyStyleId(doc.FindStyleIdByName(style.InlineName, false));
+            run.ApplyStyleId(doc.FindStyleIdByName(style.Name, false));
 
             return run;
         }

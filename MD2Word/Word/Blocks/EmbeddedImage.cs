@@ -8,7 +8,7 @@ using A = DocumentFormat.OpenXml.Drawing;
 using DW = DocumentFormat.OpenXml.Drawing.Wordprocessing;
 using PIC = DocumentFormat.OpenXml.Drawing.Pictures;
 
-namespace MD2Word.Word
+namespace MD2Word.Word.Blocks
 {
     public class EmbeddedImage
     {

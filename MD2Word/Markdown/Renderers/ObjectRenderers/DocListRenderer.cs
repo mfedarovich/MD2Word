@@ -10,9 +10,10 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
         }
         protected override void Write(DocRenderer renderer, ListBlock listBlock)
         {
+            using var paragraph = Document.CreateParagraph();
             if (listBlock.IsOrdered)
             {
-                Document.PushStyle(FontStyles.NumberList, false);
+                paragraph.SetStyle(FontStyles.NumberList);
                 for (var i = 0; i < listBlock.Count; i++)
                 {
                     var item = listBlock[i];
@@ -22,7 +23,7 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
             }
             else
             {
-                Document.PushStyle(FontStyles.BulletList,  false);
+                paragraph.SetStyle(FontStyles.BulletList);
 
                 for (var i = 0; i < listBlock.Count; i++)
                 {
@@ -34,8 +35,6 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
                     }
                 }
             }
-
-            Document.PopStyle(false);
         }
     }
 }

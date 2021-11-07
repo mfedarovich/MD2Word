@@ -86,18 +86,18 @@ namespace MD2Word.Markdown.Renderers
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Write(StringSlice slice, bool inline = false)
+        public void Write(StringSlice slice)
         {
-            Write(ref slice, inline);
+            Write(ref slice);
         }
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public void Write(ref StringSlice slice, bool inline = false)
+        public void Write(ref StringSlice slice)
         {
             if (slice.Start > slice.End)
             {
                 return;
             }
-            Write(slice.Text, slice.Start, slice.Length, inline);
+            Write(slice.Text, slice.Start, slice.Length);
         }
         
         public void Write(string content, int offset, int length, bool inline = false)
@@ -125,10 +125,7 @@ namespace MD2Word.Markdown.Renderers
                 content = new string(_buffer, offset, length);
             }
 
-            if (inline)
-                _document.WriteInlineText(content);
-            else
-                _document.WriteText(content);
+            _document.WriteText(content);
 #endif
         }
         

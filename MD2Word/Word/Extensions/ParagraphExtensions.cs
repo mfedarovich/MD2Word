@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using DocumentFormat.OpenXml.Wordprocessing;
 
-namespace MD2Word.Word
+namespace MD2Word.Word.Extensions
 {
     public static class ParagraphExtensions
     {

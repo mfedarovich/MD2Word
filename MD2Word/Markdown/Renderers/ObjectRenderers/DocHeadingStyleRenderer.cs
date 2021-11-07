@@ -11,11 +11,9 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, HeadingBlock obj)
         {
-            Document.PushStyle(FontStyles.Heading, obj.Level);
-            Document.CreateParagraph();
+            using var paragraph = Document.CreateParagraph();
+            paragraph.SetStyle(FontStyles.Heading, obj.Level);
             renderer.WriteLeafInline(obj);
-            
-            Document.PopStyle(false);
         }
     }
 }

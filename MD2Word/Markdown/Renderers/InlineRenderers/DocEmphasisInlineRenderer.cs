@@ -17,8 +17,9 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
                 case 1: _italicCount++;  break;
                 case 2: _boldCount++; break;
             }
-            
-            Document.Emphasise(_italicCount > 0, _boldCount > 0);
+
+            using var inline = Document.CreateInline();
+            inline.Emphasise(_italicCount > 0, _boldCount > 0);
 
             renderer.WriteChildren(obj);
 
@@ -27,7 +28,7 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
                 case 1: _italicCount--;  break;
                 case 2: _boldCount--; break;
             }
-            Document.Emphasise(_italicCount > 0, _boldCount > 0);
+            inline.Emphasise(_italicCount > 0, _boldCount > 0);
         }
     }
 }
