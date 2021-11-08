@@ -11,6 +11,7 @@
         NumberList,
         BulletList,
         Hyperlink,
-        Title
+        Title,
+        Brief
     }
 }

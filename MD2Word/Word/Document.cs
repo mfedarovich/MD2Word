@@ -37,13 +37,12 @@ namespace MD2Word.Word
 
         public IParagraph CreateTitle()
         {
-            var titlePlaceholder = _doc.GetPlaceholder("title");
-            var paragraph = titlePlaceholder.InsertAfterSelf(new Paragraph());
-            _current = paragraph;
-            var docParagraph = new DocParagraph(_doc, paragraph, _styles, () => _current = null);
-            Writer = docParagraph;
-            titlePlaceholder.Remove();
-            return docParagraph;
+            return CreateSpecialParagraph("title");
+        }
+
+        public IParagraph CreateBrief()
+        {
+            return CreateSpecialParagraph("brief");
         }
 
         public ITable CreateTable()
@@ -92,14 +91,22 @@ namespace MD2Word.Word
                 return p;
             }
             var paragraph = current.InsertAfterSelf(new Paragraph());
-            if (current.IsPlaceholder())
-                current.Remove();
             Current = paragraph;
             return paragraph;
         }
-        
+        private IParagraph CreateSpecialParagraph(string tag)
+        {
+            var titlePlaceholder = _doc.GetPlaceholder(tag);
+            var paragraph = titlePlaceholder.InsertAfterSelf(new Paragraph());
+            var oldCurrent = _current;
+            _current = paragraph;
+            var docParagraph = new DocParagraph(_doc, paragraph, _styles, () => _current = oldCurrent);
+            Writer = docParagraph;
+            return docParagraph;
+        }
         public void Dispose()
         {
+            _doc.RemovePlaceholders();
             _doc?.Dispose();
         }
     }

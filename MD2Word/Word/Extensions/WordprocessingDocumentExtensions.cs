@@ -19,6 +19,15 @@ namespace MD2Word.Word.Extensions
             return element;
         }
 
+        public static void RemovePlaceholders(this WordprocessingDocument document)
+        {
+            var placeholders = document.MainDocumentPart?.Document.Body?.Descendants<SdtElement>().ToArray();
+            foreach (var placeholder in placeholders)
+            {
+                placeholder.Remove();
+            }
+        }
+
         public static void SetUpdateFieldsOnOpen(this WordprocessingDocument doc)
         {
             var settingsPart = doc.MainDocumentPart?.DocumentSettingsPart;

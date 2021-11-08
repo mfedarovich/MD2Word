@@ -24,6 +24,12 @@ namespace MD2Word.Stubs
             return (IParagraph)Writer;
         }
 
+        public IParagraph CreateBrief()
+        {
+            Writer = new ParagraphStub(Log); 
+            return (IParagraph)Writer;
+        }
+
         public ITable CreateTable()
         {
             Log.Append("{table}");

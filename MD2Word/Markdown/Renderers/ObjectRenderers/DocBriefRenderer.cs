@@ -10,9 +10,9 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, BriefBlock obj)
         {
-            using var paragraph = Document.CreateParagraph();
-            var text = obj.Lines.ToSlice().ToString();
-            paragraph.WriteText(text);
+            using var paragraph = Document.CreateBrief();
+            paragraph.SetStyle(FontStyles.Brief);
+            renderer.WriteLeafRawLines(obj);
         }
     }
 }
