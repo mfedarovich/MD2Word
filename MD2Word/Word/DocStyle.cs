@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace MD2Word
+namespace MD2Word.Word
 {
     public class DocStyle : ICloneable
     {

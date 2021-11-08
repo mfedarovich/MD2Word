@@ -2,7 +2,7 @@
 using System.IO;
 using System.Text;
 
-namespace MD2Word
+namespace MD2Word.Word
 {
     public class DocumentWriter : TextWriter
     {

@@ -11,7 +11,7 @@ using MD2Word.Word.Extensions;
 using MD2Word.Word.Tables;
 using PlantUml.Net;
 
-namespace MD2Word
+namespace MD2Word.Word
 {
     public class Document : IDocument
     {

@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text;
 using FakeItEasy;
+using MD2Word.Word;
 
 namespace MD2Word
 {
