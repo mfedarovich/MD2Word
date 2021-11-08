@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Net;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
@@ -36,7 +37,7 @@ namespace MD2Word
 
         public IParagraph CreateParagraph()
         {
-            var paragraph = CreateParagraphAfter();
+            var paragraph = CreateOrReuseParagraphIfEmpty();
             DocParagraph docParagraph;
          
             void OnDestroy() => _styleHistory.Pop();
@@ -72,7 +73,7 @@ namespace MD2Word
         
         public void InsertPngImage(byte[] buffer)
         {
-            CreateParagraphAfter();
+            CreateOrReuseParagraphIfEmpty();
             _image.AddImage(Current, buffer);
         }
 
@@ -104,9 +105,13 @@ namespace MD2Word
             get =>_current ?? _doc.GetBodyPlaceholder();
             set => _current = value;
         } 
-        private Paragraph CreateParagraphAfter()
+        private Paragraph CreateOrReuseParagraphIfEmpty()
         {
             var current = Current;
+            if (current is Paragraph p && !current.Descendants<Run>().Any())
+            {
+                return p;
+            }
             var paragraph = current.InsertAfterSelf(new Paragraph());
             if (current.IsPlaceholder())
                 current.Remove();
