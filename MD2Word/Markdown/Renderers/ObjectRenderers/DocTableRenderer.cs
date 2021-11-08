@@ -21,13 +21,13 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
             foreach (var rowObj in table)
             {
                 var row = (TableRow)rowObj;
-                var docRow = docTable.AddRow(row.IsHeader);
+                using var docRow = docTable.AddRow(row.IsHeader);
                 for (var i = 0; i < row.Count; i++)
                 {
                     var cellObj = row[i];
                     var cell = (TableCell)cellObj;
 
-                    var docCell = docRow.AddCell();
+                    using var docCell = docRow.AddCell();
                     docCell.ColumnSpan = cell.ColumnSpan;
                     docCell.RowSpan = cell.RowSpan;
                     

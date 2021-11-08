@@ -10,7 +10,7 @@ namespace MD2Word.Word.Tables
     {
         private readonly Action<OpenXmlElement> _setParent;
         private readonly Table _table;
-        public DocTable(OpenXmlElement parent, Action<OpenXmlElement> setParent)
+        public DocTable(OpenXmlElement beforeElement, Action<OpenXmlElement> setParent)
         {
             _setParent = setParent;
             _table = new Table();
@@ -30,13 +30,13 @@ namespace MD2Word.Word.Tables
             );
             _table.AppendChild(props);
             
-            parent.AppendChild(_table);
-            _setParent(parent);
+            beforeElement.InsertAfterSelf(_table);
+            _setParent(_table);
         }
         
         public IRow AddRow(bool isHeader)
         {
-            return new DocRow(_table, _setParent);
+            return new DocRow(_table, _setParent, isHeader);
         }
 
         public void AddColumnDefinition(float width)
@@ -53,6 +53,7 @@ namespace MD2Word.Word.Tables
 
         public void Dispose()
         {
+            _setParent(_table);
         }
 
     }

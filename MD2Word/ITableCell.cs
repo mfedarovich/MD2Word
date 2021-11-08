@@ -1,16 +1,11 @@
-﻿namespace MD2Word
+﻿using System;
+
+namespace MD2Word
 {
-    public interface ICell
+    public interface ICell : IDisposable
     {
         int ColumnSpan { get; set; }
         int RowSpan { get; set; }
-        void Align(Alignment alignment);
-    }
-
-    public enum Alignment
-    {
-        Center,
-        Right,
-        Left
+        void Align(CellAlignment cellAlignment);
     }
 }

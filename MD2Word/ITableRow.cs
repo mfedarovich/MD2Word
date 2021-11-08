@@ -1,6 +1,8 @@
-﻿namespace MD2Word
+﻿using System;
+
+namespace MD2Word
 {
-    public interface IRow
+    public interface IRow : IDisposable
     {
         ICell AddCell();
     }

@@ -17,22 +17,30 @@ namespace MD2Word.Word
         private OpenXmlElement? _current;
         private readonly Stack<DocStyle> _styleHistory = new();
 
-        public IImage CreateImage()
+        private OpenXmlElement Current
         {
-            return new DocImage(_doc, CreateOrReuseParagraphIfEmpty());
+            get =>_current ?? _doc.GetBodyPlaceholder();
+            set => _current = value;
         }
-
         public IDocumentWriter? Writer { get; private set; } 
-
+      
         public Document(WordprocessingDocument doc, Dictionary<FontStyles, string> styles)
         {
             _doc = doc;
             _styles = styles;
         }
-
+        
+        public IImage CreateImage()
+        {
+            return new DocImage(_doc, CreateOrReuseParagraphIfEmpty());
+        }
         public ITable CreateTable()
         {
-            return new DocTable(_doc.MainDocumentPart?.Document.Body!, (newParent) => _current = newParent);
+            var current = Current;
+            var table = new DocTable(current, (newParent) => _current = newParent);
+            if (current.IsPlaceholder())
+                current.Remove();
+            return table;
         }
 
         public IParagraph CreateParagraph()
@@ -64,12 +72,6 @@ namespace MD2Word.Word
             Writer = docInline;
             return docInline;
         }
-        
-        private OpenXmlElement Current
-        {
-            get =>_current ?? _doc.GetBodyPlaceholder();
-            set => _current = value;
-        } 
         private Paragraph CreateOrReuseParagraphIfEmpty()
         {
             var current = Current;
