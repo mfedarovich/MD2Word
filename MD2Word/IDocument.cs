@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 
 namespace MD2Word
 {
@@ -9,11 +8,7 @@ namespace MD2Word
 
         IParagraph CreateParagraph();
         IInline CreateInline();
-        TextWriter GetWriter();
-        void InsertImageFromFile(string fileName);
-        void InsertImageFromUrl(string url);
-        void InsertUml(string umlScript);
-        
+        IImage CreateImage();
         IDocumentWriter Writer { get; }
     }
 }

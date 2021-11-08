@@ -16,7 +16,9 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
             {
                 sb.AppendLine(line!.ToString());
             }
-            Document.InsertUml(sb.ToString());
+
+            using var image = Document.CreateImage();
+            image.InsertUml(sb.ToString());
         }
     }
 }

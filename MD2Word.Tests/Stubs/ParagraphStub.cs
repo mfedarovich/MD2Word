@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace MD2Word
+namespace MD2Word.Stubs
 {
     class ParagraphStub : BlockTextStub, IParagraph
     {

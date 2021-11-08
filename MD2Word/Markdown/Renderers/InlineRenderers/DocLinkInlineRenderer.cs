@@ -77,10 +77,12 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
         private void DrawImage(LinkInline link)
         {
             Document.CreateParagraph();
+            
+            using var image = Document.CreateImage();
             if (File.Exists(link.Url))
-                Document.InsertImageFromFile(link.Url!);
+                image.InsertImageFromFile(link.Url!);
             else
-                Document.InsertImageFromUrl(link.Url!);
+                image.InsertImageFromUrl(link.Url!);
         }
 
         private void WriteCaption(string label)

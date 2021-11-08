@@ -1,15 +1,13 @@
 ﻿using System.Text;
 
-namespace MD2Word
+namespace MD2Word.Stubs
 {
-    public abstract class BlockTextStub : IBlockText
+    public abstract class BlockTextStub : BaseStub, IBlockText
     {
         private bool _styleSpecified = false;
-        protected StringBuilder Log { get; }
 
-        protected BlockTextStub(StringBuilder log)
+        protected BlockTextStub(StringBuilder log) : base(log)
         {
-            Log = log;
         }
         public abstract void WriteText(string text);
 
@@ -28,12 +26,6 @@ namespace MD2Word
             Log.Append(label == url ? $"h:{url}" : $"h:{label}-{url}");
         }
 
-        public void Dispose()
-        {
-            if(_styleSpecified)
-                Log.Append("{!}");
-        }
-
         public virtual void SetStyle(FontStyles style, int level = 0)
         {
             _styleSpecified = true;
@@ -41,6 +33,12 @@ namespace MD2Word
 
         public void Emphasise(bool italic, bool bold)
         {
+        }
+
+        public override void Dispose()
+        {
+            if(_styleSpecified)
+                Log.Append("{!}");
         }
     }
 }

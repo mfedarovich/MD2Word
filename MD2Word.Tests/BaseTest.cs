@@ -1,6 +1,7 @@
 ﻿using Markdig;
 using MD2Word.Markdown;
 using MD2Word.Markdown.Renderers;
+using MD2Word.Stubs;
 using NUnit.Framework;
 
 namespace MD2Word
