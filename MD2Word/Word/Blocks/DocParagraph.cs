@@ -10,6 +10,10 @@ namespace MD2Word.Word.Blocks
     {
         private readonly Paragraph _paragraph;
 
+        public DocParagraph(WordprocessingDocument document, Paragraph paragraph, Dictionary<FontStyles, string> styles) : 
+            this(document, paragraph, styles, () => { })
+        {
+        }
         public DocParagraph(WordprocessingDocument document, Paragraph paragraph, Dictionary<FontStyles, string> styles, Action onDestroy) : 
             base(document, paragraph, styles, onDestroy)
         {

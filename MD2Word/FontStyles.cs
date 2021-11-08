@@ -10,6 +10,7 @@
         Heading,
         NumberList,
         BulletList,
-        Hyperlink
+        Hyperlink,
+        Title
     }
 }

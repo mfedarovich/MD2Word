@@ -1,5 +1,4 @@
-﻿using System;
-using Markdig.Syntax;
+﻿using Markdig.Syntax;
 
 namespace MD2Word.Markdown.Renderers.ObjectRenderers
 {
@@ -11,9 +10,20 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, HeadingBlock obj)
         {
-            using var paragraph = Document.CreateParagraph();
-            paragraph.SetStyle(FontStyles.Heading, obj.Level);
-            renderer.WriteLeafInline(obj);
+            if (obj.Level == 1)
+            {
+                using var paragraph = Document.CreateTitle();
+                paragraph.SetStyle(FontStyles.Title);
+                
+                renderer.WriteLeafInline(obj);
+            }
+            else
+            {
+                using var paragraph = Document.CreateParagraph();
+                paragraph.SetStyle(FontStyles.Heading, obj.Level - 1);
+                
+                renderer.WriteLeafInline(obj);
+            }
         }
     }
 }

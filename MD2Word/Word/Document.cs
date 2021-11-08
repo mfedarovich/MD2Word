@@ -19,7 +19,7 @@ namespace MD2Word.Word
 
         private OpenXmlElement Current
         {
-            get =>_current ?? _doc.GetBodyPlaceholder();
+            get =>_current ?? _doc.GetPlaceholder("body");
             set => _current = value;
         }
         public IDocumentWriter? Writer { get; private set; } 
@@ -34,6 +34,18 @@ namespace MD2Word.Word
         {
             return new DocImage(_doc, CreateOrReuseParagraphIfEmpty());
         }
+
+        public IParagraph CreateTitle()
+        {
+            var titlePlaceholder = _doc.GetPlaceholder("title");
+            var paragraph = titlePlaceholder.InsertAfterSelf(new Paragraph());
+            _current = paragraph;
+            var docParagraph = new DocParagraph(_doc, paragraph, _styles, () => _current = null);
+            Writer = docParagraph;
+            titlePlaceholder.Remove();
+            return docParagraph;
+        }
+
         public ITable CreateTable()
         {
             var current = Current;

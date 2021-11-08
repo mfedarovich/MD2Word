@@ -8,11 +8,11 @@ namespace MD2Word.Word.Extensions
 {
     public static class Extensions
     {
-        public static OpenXmlElement GetBodyPlaceholder(this WordprocessingDocument document)
+        public static OpenXmlElement GetPlaceholder(this WordprocessingDocument document, string tag)
         {
             // string contentControlTag;
-            var element = document.MainDocumentPart?.Document.Body?.Descendants<SdtElement>().FirstOrDefault();
-            // .FirstOrDefault(sdt => sdt.SdtProperties.GetFirstChild<Tag>()?.Val == contentControlTag);
+            var element = document.MainDocumentPart?.Document.Body?.Descendants<SdtElement>()
+                .FirstOrDefault(sdt => sdt.SdtProperties?.GetFirstChild<Tag>()?.Val == tag);
             if (element == null)
                 throw new ArgumentException($"Documentation body placeholder is not found.");
 
@@ -22,7 +22,7 @@ namespace MD2Word.Word.Extensions
         public static void SetUpdateFieldsOnOpen(this WordprocessingDocument doc)
         {
             var settingsPart = doc.MainDocumentPart?.DocumentSettingsPart;
-            settingsPart?.Settings.Append(new UpdateFieldsOnOpen { Val = true });
+            settingsPart?.Settings.AppendChild(new UpdateFieldsOnOpen { Val = OnOffValue.FromBoolean(true) });
         }
         public static string FindStyleIdByName(this WordprocessingDocument doc, string styleName, bool forParagraph = true)
         {         

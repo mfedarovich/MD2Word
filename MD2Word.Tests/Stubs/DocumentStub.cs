@@ -18,6 +18,12 @@ namespace MD2Word.Stubs
 
         public string Result => Log.ToString();
 
+        public IParagraph CreateTitle()
+        {
+            Writer = new ParagraphStub(Log); 
+            return (IParagraph)Writer;
+        }
+
         public ITable CreateTable()
         {
             Log.Append("{table}");
