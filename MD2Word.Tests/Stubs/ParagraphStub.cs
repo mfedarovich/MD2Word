@@ -22,5 +22,10 @@ namespace MD2Word.Stubs
             else
                 Log.AppendFormat("{{{0}#{1}}}", style.ToString(), level);
         }
+
+        public void CreateHorizontalRule()
+        {
+            Log.AppendLine("{hz rule}");
+        }
     }
 }

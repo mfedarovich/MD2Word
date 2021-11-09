@@ -10,7 +10,8 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, ThematicBreakBlock obj)
         {
-            renderer.Write(obj.Content);
+            using var paragraph = Document.CreateParagraph();
+            paragraph.CreateHorizontalRule();
         }
     }
 }

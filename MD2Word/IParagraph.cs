@@ -2,5 +2,6 @@
 {
     public interface IParagraph : IBlockText
     {
+        void CreateHorizontalRule();
     }
 }

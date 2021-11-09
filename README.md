@@ -10,6 +10,8 @@ It create Word document, based on the predefined template.
 * Embedding images from local drive or web
 * [PlantUML](http://plantuml.com/) - for UML diagram generation
 * Code blocks (without syntax highlighting)
+* Thematic break
+* Quotes
 
 # Documentation
 ## Template Document

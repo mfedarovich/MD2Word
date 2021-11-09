@@ -20,6 +20,7 @@ namespace MD2Word
         }
         
         
+        [Ignore("not finished test")]
         [TestCase("| S | T |\r\n|---|---| \r\n| G | H |")]
         [TestCase("| S | \r\n|---|\r\n| G |\r\n\r\n| D | D |\r\n| ---| ---| \r\n| V | V |")]
         public void TablesAreParsedCorrectly2(string markdown)
