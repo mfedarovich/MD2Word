@@ -17,7 +17,7 @@ namespace MD2Word.Word
             public void WriteText(string text){}
             public void WriteSymbol(string symbol){}
             public void WriteLine(){}
-            public void WriteHyperlink(string label, string url){}
+            public void WriteHyperlink(string url){}
         }
         private readonly WordprocessingDocument _doc;
         private readonly Dictionary<FontStyles, string> _styles;

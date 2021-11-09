@@ -21,9 +21,9 @@ namespace MD2Word.Stubs
             Log.AppendLine();
         }
 
-        public void WriteHyperlink(string label, string url)
+        public void WriteHyperlink(string url)
         {
-            Log.Append(label == url ? $"h:{url}" : $"h:{label}-{url}");
+            Log.Append($"h:{url}");
         }
 
         public virtual void SetStyle(FontStyles style, int level = 0)

@@ -5,6 +5,6 @@
         void WriteText(string text);
         void WriteSymbol(string symbol);
         void WriteLine();
-        void WriteHyperlink(string label, string url);
+        void WriteHyperlink(string url);
     }
 }

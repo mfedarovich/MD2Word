@@ -16,7 +16,7 @@ namespace MD2Word
         [TestCase("[description](url)", "description", "url")]
         public void Test(string value, string description, string url)
         {
-            TestOutput(value, $"p\r\nh:{description}-{url}");
+            TestOutput(value, $"p\r\n[{description}]h:{url}");
         }
 
         [TestCase("[a](https://www.google.com/ \"title\") ", "a", "https://www.google.com/", "title")]
@@ -25,29 +25,29 @@ namespace MD2Word
         [TestCase("[*a*](https://www.google.com/ (title))", "a", "https://www.google.com/", "title")]
         public void Test_Title(string value, string description, string url, string title)
         {
-            var expected = $"p\r\n[{description}]h:{title}-{url}";
+            var expected = $"p\r\n[{description}]h:{url}";
             TestOutput(value, expected);
         }
 
-        [TestCase("[a](< >)", "a", " ")]
         [TestCase("[a](<b>)", "a", "b")]
         [TestCase("[a](<b b>)", "a", "b b")]
         public void Test_PointyBrackets(string value, string description, string url)
         {
-            var expected = $"p\r\nh:{description}-{url}";
+            var expected = $"p\r\n[{description}]h:{url}";
             TestOutput(value, expected);
         }
         
         [TestCase("[a](https://www.google.com/)", "a", "https://www.google.com/")]
         public void Test_EmptyTitle(string value, string description, string url)
         {
-            var expected = $"p\r\nh:{description}-{url}";
+            var expected = $"p\r\n[{description}]h:{url}";
             TestOutput(value, expected);
         }
 
         [TestCase("[a]()", "a")]
         [TestCase("[a](<>)", "a")]
         [TestCase("[description]()", "description")] 
+        [TestCase("[a](< >)", "a")]
         public void Test_EmptyUrl(string value, string description)
         {
             var expected = $"p\r\n[{description}]";

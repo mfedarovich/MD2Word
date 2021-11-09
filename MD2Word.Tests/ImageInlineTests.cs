@@ -10,7 +10,7 @@ namespace MD2Word
         public void TestEmptyDescription(string value, string description, string url, bool isLocal)
         {
             var expected =
-                $"p\r\np\r\nimg-{(isLocal ? "file" : "url")}:{url}\r\n";
+                $"p\r\nimg-{(isLocal ? "file" : "url")}:{url}\r\n";
             TestOutput(value, expected);
         }
         
@@ -19,7 +19,7 @@ namespace MD2Word
         public void TestLinkWithDescription(string value, string description, string url, bool isLocal)
         {
             var expected =
-                $"p\r\n{{iCAPTION}}[{description}]{{!}}p\r\nimg-{(isLocal ? "file" : "url")}:{url}\r\n";
+                $"p\r\nimg-{(isLocal ? "file" : "url")}:{url}\r\n";
             TestOutput(value, expected);
         }
 
@@ -28,14 +28,14 @@ namespace MD2Word
         {
             var value = "paragraph ![description](http://example.com)";
             var expected =
-                $"p\r\n[paragraph ]{{iCAPTION}}[description]{{!}}p\r\nimg-url:http://example.com\r\n";
+                $"p\r\n[paragraph ]img-url:http://example.com\r\n";
             TestOutput(value, expected);
         }
 
         [TestCase("[![img](img_source)](link)")]
         public void ImageWithLinkTest(string markdown)
         {
-            TestOutput(markdown, markdown);
+            TestOutput(markdown, "p\r\nimg-url:img_source\r\nh:link");
         }
     }
 }

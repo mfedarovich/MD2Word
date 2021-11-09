@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Drawing;
-using DocumentFormat.OpenXml.Drawing.Wordprocessing;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using MD2Word.Word.Extensions;
 using Break = DocumentFormat.OpenXml.Wordprocessing.Break;
 using Hyperlink = DocumentFormat.OpenXml.Wordprocessing.Hyperlink;
 using Run = DocumentFormat.OpenXml.Wordprocessing.Run;
-using RunProperties = DocumentFormat.OpenXml.Wordprocessing.RunProperties;
 using Text = DocumentFormat.OpenXml.Wordprocessing.Text;
 
 namespace MD2Word.Word.Blocks
@@ -61,7 +58,7 @@ namespace MD2Word.Word.Blocks
             Parent.AppendChild(new Run(new Break()));
         }
 
-        public void WriteHyperlink(string label, string url)
+        public void WriteHyperlink(string url)
         {
             Uri uri;
             try
@@ -70,7 +67,6 @@ namespace MD2Word.Word.Blocks
             }
             catch (UriFormatException)
             {
-                WriteText(label);
                 WriteText(url);
                 return;
             }
@@ -103,7 +99,7 @@ namespace MD2Word.Word.Blocks
                 }
                 else
                 {
-                    run = new Run(new Text(label));
+                    run = new Run();
                 }
                 run.Emphasise(Style.Italic, Style.Bold);
                 run.ApplyStyleId(Style[FontStyles.Hyperlink]);

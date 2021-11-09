@@ -20,43 +20,15 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
                     WriteCaption(inline, link.Title!);
                 }
                 DrawImage(link);
-                return;
-            }
-
-            renderer.WriteChildren(link);
-
-            string caption = link.Title!;
-            if (string.IsNullOrEmpty(caption))
-            {
-                caption = SerializeChildrenToString(link);
             }
             else
             {
                 renderer.WriteChildren(link);
+                if (!string.IsNullOrEmpty(link.Url?.Trim()))
+                    inline.WriteHyperlink(link.Url!);    
             }
-            InsertHyperlink(inline, caption, link);
         }
         
-        private static string SerializeChildrenToString(ContainerInline containerInline)
-        {
-            var sb = new StringBuilder();
-            var inline = containerInline.FirstChild;
-            while (inline != null)
-            {
-                sb.Append((inline as LiteralInline)?.Content.ToString());
-                inline = inline.NextSibling;
-            }
-
-            return sb.ToString();
-        }
-
-        private void InsertHyperlink(IInline inline, string label, LinkInline link)
-        {
-            if (string.IsNullOrEmpty(label))
-                label = link.Url!;
-            inline.WriteHyperlink(label, link.Url!);
-        }
-
         private void DrawImage(LinkInline link)
         {
             using var image = Document.CreateImage();
