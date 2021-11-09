@@ -12,6 +12,7 @@
         BulletList,
         Hyperlink,
         Title,
-        Brief
+        Brief,
+        Quote
     }
 }
