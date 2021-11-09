@@ -12,32 +12,20 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
         
         protected override void Write(DocRenderer renderer, LinkInline link)
         {
-            renderer.WriteChildren(link);
-            string caption;
+            using var inline = Document.CreateInline();
             if (link.IsImage)
             {
                 if (!string.IsNullOrEmpty(link.Title))
                 {
-                    WriteCaption(link.Title!);
-                    renderer.WriteChildren(link);
-                }
-                else
-                {
-                    caption = SerializeChildrenToString(link);
-                    if (caption.Length > 0)
-                        WriteCaption(caption);
+                    WriteCaption(inline, link.Title!);
                 }
                 DrawImage(link);
                 return;
             }
 
-            if (string.IsNullOrEmpty(link.Url))
-            {
-                renderer.WriteChildren(link);
-                return;
-            }
-            
-            caption = link.Title!;
+            renderer.WriteChildren(link);
+
+            string caption = link.Title!;
             if (string.IsNullOrEmpty(caption))
             {
                 caption = SerializeChildrenToString(link);
@@ -46,7 +34,7 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
             {
                 renderer.WriteChildren(link);
             }
-            InsertHyperlink(caption, link);
+            InsertHyperlink(inline, caption, link);
         }
         
         private static string SerializeChildrenToString(ContainerInline containerInline)
@@ -62,9 +50,8 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
             return sb.ToString();
         }
 
-        private void InsertHyperlink(string label, LinkInline link)
+        private void InsertHyperlink(IInline inline, string label, LinkInline link)
         {
-            using var inline = Document.CreateInline();
             if (string.IsNullOrEmpty(label))
                 label = link.Url!;
             inline.WriteHyperlink(label, link.Url!);
@@ -72,8 +59,6 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
 
         private void DrawImage(LinkInline link)
         {
-            Document.CreateParagraph();
-            
             using var image = Document.CreateImage();
             if (File.Exists(link.Url))
                 image.InsertImageFromFile(link.Url!);
@@ -81,11 +66,10 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
                 image.InsertImageFromUrl(link.Url!);
         }
 
-        private void WriteCaption(string label)
+        private void WriteCaption(IInline inline, string label)
         {
             if (string.IsNullOrEmpty(label)) return;
 
-            using var inline = Document.CreateInline();
             inline.SetStyle(FontStyles.Caption);
             inline.WriteText(label);
         }

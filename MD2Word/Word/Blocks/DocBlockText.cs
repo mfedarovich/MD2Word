@@ -2,9 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Drawing;
+using DocumentFormat.OpenXml.Drawing.Wordprocessing;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using MD2Word.Word.Extensions;
+using Break = DocumentFormat.OpenXml.Wordprocessing.Break;
+using Hyperlink = DocumentFormat.OpenXml.Wordprocessing.Hyperlink;
+using Run = DocumentFormat.OpenXml.Wordprocessing.Run;
+using RunProperties = DocumentFormat.OpenXml.Wordprocessing.RunProperties;
+using Text = DocumentFormat.OpenXml.Wordprocessing.Text;
 
 namespace MD2Word.Word.Blocks
 {
@@ -71,17 +78,43 @@ namespace MD2Word.Word.Blocks
             var rel = mainPart!.HyperlinkRelationships.FirstOrDefault(hr => hr.Uri == uri) ??
                       mainPart.AddHyperlinkRelationship(uri, true);
 
-            var run = new Run(
-                new RunProperties(
-                    new RunStyle() { Val = Style[FontStyles.Hyperlink] }),
-                new Text(label)
-            );
-            run.Emphasise(Style.Italic, Style.Bold);
-            
-            var hl = new Hyperlink(
-                new ProofError() { Type = ProofingErrorValues.GrammarStart },
-                run) { History = OnOffValue.FromBoolean(true), Id = rel.Id };
-            Parent.AppendChild(hl);
+            var drawing = Parent.Descendants<Drawing>().FirstOrDefault();
+
+            if (drawing != null)
+            {
+                var clone = drawing.CloneNode(true);
+                var hl = new Hyperlink(new ProofError() { Type = ProofingErrorValues.GrammarStart }, clone)
+                {
+                    History = OnOffValue.FromBoolean(true), 
+                    Id = rel.Id
+                };
+                drawing.InsertAfterSelf(hl);
+                drawing.Remove();
+                (Parent as Run)?.ApplyStyleId(Style[FontStyles.Hyperlink]);
+            }
+            else
+            {
+                var existing = Parent.Descendants<Run>().LastOrDefault();
+                Run run;
+                if (existing != null)
+                {
+                    run = (Run)existing.CloneNode(true);
+                    existing.Remove();
+                }
+                else
+                {
+                    run = new Run(new Text(label));
+                }
+                run.Emphasise(Style.Italic, Style.Bold);
+                run.ApplyStyleId(Style[FontStyles.Hyperlink]);
+
+                var hl = new Hyperlink(new ProofError() { Type = ProofingErrorValues.GrammarStart }, run)
+                {
+                    History = OnOffValue.FromBoolean(true), 
+                    Id = rel.Id
+                };
+                Parent.AppendChild(hl);
+            }
         }
         
         // public void WriteHtml(string html)

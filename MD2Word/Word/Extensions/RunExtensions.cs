@@ -71,7 +71,8 @@ namespace MD2Word.Word.Extensions
         {
             var pPr = run.Elements<RunProperties>().FirstOrDefault() ??
                       run.PrependChild(new RunProperties());
-            pPr.RunStyle = new RunStyle { Val = styleId };
+            pPr.RunStyle ??= new RunStyle();
+            pPr.RunStyle.Val = styleId;
         }
     }
 }

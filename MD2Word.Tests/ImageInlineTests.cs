@@ -31,5 +31,11 @@ namespace MD2Word
                 $"p\r\n[paragraph ]{{iCAPTION}}[description]{{!}}p\r\nimg-url:http://example.com\r\n";
             TestOutput(value, expected);
         }
+
+        [TestCase("[![img](img_source)](link)")]
+        public void ImageWithLinkTest(string markdown)
+        {
+            TestOutput(markdown, markdown);
+        }
     }
 }
