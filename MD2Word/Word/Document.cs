@@ -12,22 +12,29 @@ namespace MD2Word.Word
 {
     public class Document : IDocument
     {
+        private class EmptyWriter : IDocumentWriter
+        {
+            public void WriteText(string text){}
+            public void WriteSymbol(string symbol){}
+            public void WriteLine(){}
+            public void WriteHyperlink(string label, string url){}
+        }
         private readonly WordprocessingDocument _doc;
         private readonly Dictionary<FontStyles, string> _styles;
         private OpenXmlElement? _current;
-        private readonly Stack<DocStyle> _styleHistory = new();
-
+ 
         private OpenXmlElement Current
         {
             get =>_current ?? _doc.GetPlaceholder("body");
             set => _current = value;
         }
-        public IDocumentWriter? Writer { get; private set; } 
+        public IDocumentWriter Writer { get; private set; } 
       
         public Document(WordprocessingDocument doc, Dictionary<FontStyles, string> styles)
         {
             _doc = doc;
             _styles = styles;
+            Writer = new EmptyWriter();
         }
         
         public IImage CreateImage()
@@ -57,21 +64,8 @@ namespace MD2Word.Word
         public IParagraph CreateParagraph()
         {
             var paragraph = CreateOrReuseParagraphIfEmpty();
-            DocParagraph docParagraph;
-         
-            void OnDestroy() => _styleHistory.Pop();
-            if (_styleHistory.Count == 0)
-            {
-                docParagraph = new DocParagraph(_doc, paragraph, _styles, OnDestroy);
-            }
-            else
-            {
-                docParagraph = new DocParagraph(_doc, paragraph, (DocStyle)(_styleHistory.Peek()).Clone(),
-                    OnDestroy);
-            }
-            
+            DocParagraph docParagraph = new(_doc, paragraph, _styles);
             Writer = docParagraph;
-            _styleHistory.Push(docParagraph.Style);
             return docParagraph;
         }
 
@@ -100,14 +94,15 @@ namespace MD2Word.Word
             var paragraph = titlePlaceholder.InsertAfterSelf(new Paragraph());
             var oldCurrent = _current;
             _current = paragraph;
-            var docParagraph = new DocParagraph(_doc, paragraph, _styles, () => _current = oldCurrent);
+            var docParagraph = new DocParagraph(_doc, paragraph, _styles);
+            docParagraph.Closing += () => _current = oldCurrent;
             Writer = docParagraph;
             return docParagraph;
         }
         public void Dispose()
         {
             _doc.RemovePlaceholders();
-            _doc?.Dispose();
+            _doc.Dispose();
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using DocumentFormat.OpenXml;
+﻿using System.Collections.Generic;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using MD2Word.Word.Extensions;
@@ -10,17 +8,12 @@ namespace MD2Word.Word.Blocks
     public class DocParagraph : DocBlockText, IParagraph
     {
         private Paragraph Paragraph => (Paragraph)Parent;
-
-        public DocParagraph(WordprocessingDocument document, Paragraph paragraph, Dictionary<FontStyles, string> styles, Action onDestroy) : 
-            base(document, paragraph, styles, onDestroy)
+        
+        public DocParagraph(WordprocessingDocument document, Paragraph paragraph, Dictionary<FontStyles, string> styles) : 
+            base(document, paragraph, styles)
         {
         }
-
-        public DocParagraph(WordprocessingDocument document, Paragraph paragraph, DocStyle style, Action onDestroy) : 
-            base(document, paragraph, style, onDestroy)
-        {
-        }
-
+        
         public override void SetStyle(FontStyles style, int level)
         {
             base.SetStyle(style, level);

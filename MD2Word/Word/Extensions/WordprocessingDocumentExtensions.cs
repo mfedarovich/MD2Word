@@ -22,7 +22,7 @@ namespace MD2Word.Word.Extensions
         public static void RemovePlaceholders(this WordprocessingDocument document)
         {
             var placeholders = document.MainDocumentPart?.Document.Body?.Descendants<SdtElement>().ToArray();
-            foreach (var placeholder in placeholders)
+            foreach (var placeholder in placeholders!)
             {
                 placeholder.Remove();
             }
