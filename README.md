@@ -7,7 +7,7 @@ It create Word document, based on the predefined template.
 * Bullet lists
 * Hyperlinks
 * Emphasis
-* Embedding images from local drive or web
+* Embedding images from local drive, web (including svg)
 * [PlantUML](http://plantuml.com/) - for UML diagram generation
 * Code blocks (without syntax highlighting)
 * Thematic break

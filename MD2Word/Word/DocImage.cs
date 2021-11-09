@@ -1,9 +1,13 @@
-﻿using System.IO;
+﻿using System;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Net;
+using System.Text;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using MD2Word.Word.Blocks;
 using PlantUml.Net;
+using Svg;
 
 namespace MD2Word.Word
 {
@@ -29,7 +33,25 @@ namespace MD2Word.Word
         {
             using var webClient = new WebClient();
             var data = webClient.DownloadData(url);
-            InsertPngImage(data);
+            if (IsSvg(data))
+                InsertSvgImage(data);
+            else
+                InsertPngImage(data);
+        }
+
+        private bool IsSvg(byte[] data)
+        {
+            return Encoding.UTF8.GetString(data, 0, Math.Min(10, data.Length)).Contains("svg");
+        }
+
+        private void InsertSvgImage(byte[] data)
+        {
+            using var loadStream = new MemoryStream(data);
+            var svgDocument = SvgDocument.Open<SvgDocument>(loadStream);
+            var bitmap = svgDocument.Draw();
+            using var saveStream = new MemoryStream();
+            bitmap.Save(saveStream, ImageFormat.Png);
+            InsertPngImage(saveStream.ToArray());
         }
 
         public void InsertUml(string umlScript)

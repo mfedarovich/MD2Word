@@ -12,11 +12,7 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
         
         protected override void Write(DocRenderer renderer, LinkInline link)
         {
-            if (link.Url == null)
-            {
-                renderer.WriteChildren(link);
-                return;
-            }
+            renderer.WriteChildren(link);
             string caption;
             if (link.IsImage)
             {
