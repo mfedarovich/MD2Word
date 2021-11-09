@@ -33,26 +33,26 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
                     
                     if (table.ColumnDefinitions.Count > 0)
                     {
-                        // var columnIndex = Math.Min(
-                        //         Math.Max(0, cell.ColumnIndex), 
-                        //         table.ColumnDefinitions.Count - 1);
+                        var columnIndex = Math.Min(
+                                Math.Max(0, cell.ColumnIndex), 
+                                table.ColumnDefinitions.Count - 1);
                         
-                        // var alignment = table.ColumnDefinitions[columnIndex].Alignment;
-                        // if (alignment.HasValue)
-                        // {
-                        //     switch (alignment)
-                        //     {
-                        //         case TableColumnAlign.Center:
-                        //             docCell.Align(Alignment.Center);
-                        //             break;
-                        //         case TableColumnAlign.Right:
-                        //             docCell.Align(Alignment.Right);
-                        //             break;
-                        //         case TableColumnAlign.Left:
-                        //             docCell.Align(Alignment.Left);
-                        //             break;
-                        //     }
-                        // }
+                        var alignment = table.ColumnDefinitions[columnIndex].Alignment;
+                        if (alignment.HasValue)
+                        {
+                            switch (alignment)
+                            {
+                                case TableColumnAlign.Center:
+                                    docCell.Align(CellAlignment.Center);
+                                    break;
+                                case TableColumnAlign.Right:
+                                    docCell.Align(CellAlignment.Right);
+                                    break;
+                                case TableColumnAlign.Left:
+                                    docCell.Align(CellAlignment.Left);
+                                    break;
+                            }
+                        }
                     }
                     renderer.Write(cell);
                 }

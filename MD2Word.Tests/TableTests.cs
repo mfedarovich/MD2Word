@@ -1,6 +1,8 @@
 ﻿using System.Linq;
+using FakeItEasy;
 using Markdig.Syntax;
 using Markdig.Extensions.Tables;
+using MD2Word.Markdown.Renderers;
 using NUnit.Framework;
 
 namespace MD2Word
@@ -17,6 +19,24 @@ namespace MD2Word
             var tables = document.Descendants().OfType<Table>().ToArray();
 
             Assert.AreEqual(tableCount, tables.Length);
+        }
+        
+        [TestCase("| S | T |\r\n|:---|:---| \r\n| G | H |", CellAlignment.Left)]
+        [TestCase("| S | T |\r\n|:---:|:---:| \r\n| G | H |", CellAlignment.Center)]
+        [TestCase("| S | T |\r\n|---:|---:| \r\n| G | H |", CellAlignment.Right)]
+        public void AlignmentTests(string markdown, CellAlignment alignment)
+        {
+            var table = A.Fake<ITable>();
+            var row = A.Fake<IRow>();
+            var cell = A.Fake<ICell>();
+            var document = A.Fake<IDocument>();
+            A.CallTo(() => document.CreateTable()).Returns(table);
+            A.CallTo(() => table.AddRow(A<bool>.Ignored)).Returns(row);
+            A.CallTo(() => row.AddCell()).Returns(cell);
+
+            Markdig.Markdown.Convert(markdown, new DocRenderer(document), Pipeline);
+
+            A.CallTo(() => cell.Align(A<CellAlignment>.That.IsEqualTo(alignment))).MustHaveHappened();
         }
         
         
