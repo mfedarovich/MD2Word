@@ -7,6 +7,7 @@ namespace MD2Word.Stubs
     {
         public DocumentStub() : base(new StringBuilder())
         {
+            Writer = A.Fake<IDocumentWriter>();
         }
         
         public IImage CreateImage()

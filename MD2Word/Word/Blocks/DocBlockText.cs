@@ -8,7 +8,6 @@ using MD2Word.Word.Extensions;
 using Break = DocumentFormat.OpenXml.Wordprocessing.Break;
 using Hyperlink = DocumentFormat.OpenXml.Wordprocessing.Hyperlink;
 using Run = DocumentFormat.OpenXml.Wordprocessing.Run;
-using Text = DocumentFormat.OpenXml.Wordprocessing.Text;
 
 namespace MD2Word.Word.Blocks
 {
@@ -39,6 +38,10 @@ namespace MD2Word.Word.Blocks
             Style.Bold = bold;
         }
 
+        public void SetForeground(string? rgb) => Style.Foreground = rgb;
+
+        public void SetBackground(string? rgb) => Style.Background = rgb;
+
         public abstract void WriteText(string text);
 
         public void WriteSymbol(string htmlSymbol)
@@ -46,17 +49,13 @@ namespace MD2Word.Word.Blocks
             var symbol = HtmlSymbol.Parse(htmlSymbol);
             var run = new Run();
             run
-                .ApplyInlineStyle(Document, Style)
-                .Emphasise(Style.Italic, Style.Bold)
+                .ApplyStyle(Document, Style)
                 .AppendSymbol(symbol);
             
             Parent.AppendChild(run);
         }
 
-        public  void WriteLine()
-        {
-            Parent.AppendChild(new Run(new Break()));
-        }
+        public void WriteLine() => Parent.AppendChild(new Run(new Break()));
 
         public void WriteHyperlink(string url)
         {

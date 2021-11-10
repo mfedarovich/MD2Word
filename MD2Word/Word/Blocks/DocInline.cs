@@ -15,8 +15,7 @@ namespace MD2Word.Word.Blocks
         public override void WriteText(string text)
         {
             var run = new Run();
-            run.ApplyInlineStyle(base.Document, Style)
-                .Emphasise(Style.Italic, Style.Bold)
+            run.ApplyStyle(Document, Style)
                 .AppendText(text, true);
             Parent.AppendChild(run);
         }

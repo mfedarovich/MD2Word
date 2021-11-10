@@ -35,6 +35,16 @@ namespace MD2Word.Stubs
         {
         }
 
+        public void SetForeground(string? rgb)
+        {
+            
+        }
+
+        public void SetBackground(string? rgb)
+        {
+            
+        }
+
         public override void Dispose()
         {
             if(_styleSpecified)

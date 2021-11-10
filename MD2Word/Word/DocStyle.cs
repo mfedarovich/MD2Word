@@ -30,6 +30,9 @@ namespace MD2Word.Word
         
         public bool Bold { get; set; }
         public bool Italic { get; set; }
+        public string? Foreground { get; set; }
+        public string? Background { get; set; }
+
         public string this[FontStyles hyperlink] => _styles[hyperlink];
         public object Clone()
         {

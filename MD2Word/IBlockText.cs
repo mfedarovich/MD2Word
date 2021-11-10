@@ -6,5 +6,7 @@ namespace MD2Word
     {
         void SetStyle(FontStyles style, int level = 0);
         void Emphasise(bool italic, bool bold);
+        void SetForeground(string? rgb);
+        void SetBackground(string? rgb);
     }
 }
