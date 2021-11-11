@@ -24,8 +24,13 @@ namespace MD2Word.Markdown.Parsers
                 return BlockState.None;
             }
 
-            if (TryToCreateBlock<BriefBlock>(processor, Brief, p => p.IsBlankLine)) 
+            if (TryToCreateBlock<BriefBlock>(processor, Brief, p => p.IsBlankLine))
+            {
+                processor.Line.Start += Brief.Length + 1;
+                processor.Line.TrimStart();
                 return BlockState.Continue;
+            }
+
             if (TryToCreateBlock<PlantUmlBlock>(processor, PlanUmlStart, p => p.Line.IndexOf(PlantUmlEnd)>=0)) 
                 return BlockState.ContinueDiscard;
       
