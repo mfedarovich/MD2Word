@@ -17,7 +17,9 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, CodeBlock obj)
         {
-            _formatter.Write(obj.Lines.Lines.Select(x => x.ToString()), Languages.CSharp);
+            var fenced = obj as FencedCodeBlock;
+            var lang = fenced?.Info;
+            _formatter.Write(obj.Lines.Lines.Select(x => x.ToString()), Languages.FindById(lang) ?? Languages.Markdown);
         }
     }
 }
