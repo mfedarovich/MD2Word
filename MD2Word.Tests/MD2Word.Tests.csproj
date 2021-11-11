@@ -24,4 +24,8 @@
       <ProjectReference Include="..\MD2Word\MD2Word.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Compile Remove="ColorFormatterTests.cs" />
+    </ItemGroup>
+
 </Project>

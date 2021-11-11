@@ -1,41 +1,23 @@
-﻿using System.Text;
+﻿using System.Linq;
 using ColorCode;
 using Markdig.Syntax;
+using MD2Word.ColorCode;
 
 namespace MD2Word.Markdown.Renderers.ObjectRenderers
 {
  
     public class DocCodeBlockRenderer : DocObjectRenderer<CodeBlock>
     {
+        private readonly ColorFormatter _formatter; 
+        
         public DocCodeBlockRenderer(IDocument document) : base(document)
         {
+            _formatter = new ColorFormatter(document);
         }
 
         protected override void Write(DocRenderer renderer, CodeBlock obj)
         {
-            // using var paragraph = Document.CreateParagraph();
-            // using var inline = Document.CreateInline();
-            // inline.SetStyle(FontStyles.CodeBlock);
-            //
-            // foreach (var line in obj.Lines)
-            // {
-            //     var lineOfCode = line.ToString();
-            //
-            //     if (!string.IsNullOrEmpty(lineOfCode))
-            //     {
-            //         inline.WriteText(lineOfCode);
-            //         inline.WriteLine();
-            //     }
-            // }
-
-            StringBuilder sb = new();
-            foreach (var line in obj.Lines.Lines)
-            {
-                sb.AppendLine(line.ToString());
-            }
-
-            var formatter = new ColorCode.ColorFormatter(Document);
-            formatter.Write(sb.ToString(), Languages.CSharp);
+            _formatter.Write(obj.Lines.Lines.Select(x => x.ToString()), Languages.CSharp);
         }
     }
 }
