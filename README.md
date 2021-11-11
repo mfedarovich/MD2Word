@@ -1,7 +1,7 @@
 # MD2Word
 **MD2Word** is a markdown to Microsoft Word converter for .NET. It is based on [markdig](https://github.com/xoofx/markdig) markdown processor.
 It create Word document, based on the predefined template. 
-# Supported Features
+## Supported Features
 * Headings
 * Number lists
 * Bullet lists
@@ -13,8 +13,12 @@ It create Word document, based on the predefined template.
 * Thematic break
 * Quotes
 
-# Documentation
-## Template Document
+## Requirements
+### Java
+Install [Java](https://java.com/en/download/). Ensure that the JAVA_HOME environment variable is set.
+
+## Documentation
+### Template Document
 It can be any *.docx document, where all required styles are defined:
 * Body text
 * Code text
@@ -30,7 +34,7 @@ Then you can cleanup your template.
 
 Please see for reference [template example](template_example.docx).
 
-## Configuration
+### Configuration
 All styles from template shall be mapped in the [appsettings.json](MD2Word.App/appsettings.json) like as follow:
 ```
 {
@@ -47,7 +51,7 @@ All styles from template shall be mapped in the [appsettings.json](MD2Word.App/a
 }
 ```
 
-## CLI 
+### CLI 
 | Short key | Long key | Description |
 | --------- | ---------- | ----------- |
 | -t        | --template | **Required**. Word document (*.docx), which is used as template for document generation|
