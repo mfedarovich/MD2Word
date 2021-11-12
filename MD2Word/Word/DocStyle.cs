@@ -4,11 +4,11 @@ using System.Reflection;
 
 namespace MD2Word.Word
 {
-    public class DocStyle : ICloneable
+    public class DocStyle
     {
-        private readonly Dictionary<FontStyles, string> _styles;
+        private readonly IReadOnlyDictionary<FontStyles, string> _styles;
 
-        public DocStyle(Dictionary<FontStyles, string> styles)
+        public DocStyle(IReadOnlyDictionary<FontStyles, string> styles)
         {
             _styles = styles;
         }
@@ -33,10 +33,6 @@ namespace MD2Word.Word
         public string? Foreground { get; set; }
         public string? Background { get; set; }
 
-        public string this[FontStyles hyperlink] => _styles[hyperlink];
-        public object Clone()
-        {
-            return new DocStyle(_styles) { Bold = Bold, Italic = Italic, Level = Level, Style = Style };
-        }
+        public string this[FontStyles style] => _styles[style];
     }
 }

@@ -27,7 +27,7 @@ namespace MD2Word
             converter.Convert();
         }
 
-        private static Dictionary<FontStyles, string> ReadStyles()
+        private static IReadOnlyDictionary<FontStyles, string> ReadStyles()
         {
             var builder = new ConfigurationBuilder()
                 .AddJsonFile($"appsettings.json", false, false);

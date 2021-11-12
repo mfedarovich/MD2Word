@@ -10,14 +10,14 @@ namespace MD2Word
 {
     public class Md2WordConverter
     {
-        private readonly Dictionary<FontStyles, string> _styles;
+        private readonly IReadOnlyDictionary<FontStyles, string> _styles;
         public string WordTemplateFile { get; }
         public string MarkdownFile { get; }
 
         public string? OutputFileName { get; set; }
         public string? OutputDirectory { get; set; }
 
-        public Md2WordConverter(string markdownFile, string wordTemplateFile, Dictionary<FontStyles, string> styles)
+        public Md2WordConverter(string markdownFile, string wordTemplateFile, IReadOnlyDictionary<FontStyles, string> styles)
         {
             _styles = styles;
             MarkdownFile = markdownFile;

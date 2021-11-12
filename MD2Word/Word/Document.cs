@@ -20,7 +20,7 @@ namespace MD2Word.Word
             public void WriteHyperlink(string url){}
         }
         private readonly WordprocessingDocument _doc;
-        private readonly Dictionary<FontStyles, string> _styles;
+        private readonly IReadOnlyDictionary<FontStyles, string> _styles;
         private OpenXmlElement? _current;
  
         private OpenXmlElement Current
@@ -30,7 +30,7 @@ namespace MD2Word.Word
         }
         public IDocumentWriter Writer { get; private set; } 
       
-        public Document(WordprocessingDocument doc, Dictionary<FontStyles, string> styles)
+        public Document(WordprocessingDocument doc, IReadOnlyDictionary<FontStyles, string> styles)
         {
             _doc = doc;
             _styles = styles;
@@ -56,8 +56,6 @@ namespace MD2Word.Word
         {
             var current = Current;
             var table = new DocTable(current, (newParent) => _current = newParent);
-            if (current.IsPlaceholder())
-                current.Remove();
             return table;
         }
 

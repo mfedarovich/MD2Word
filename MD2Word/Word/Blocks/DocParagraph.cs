@@ -9,7 +9,7 @@ namespace MD2Word.Word.Blocks
     {
         private Paragraph Paragraph => (Paragraph)Parent;
         
-        public DocParagraph(WordprocessingDocument document, Paragraph paragraph, Dictionary<FontStyles, string> styles) : 
+        public DocParagraph(WordprocessingDocument document, Paragraph paragraph, IReadOnlyDictionary<FontStyles, string> styles) : 
             base(document, paragraph, styles)
         {
         }

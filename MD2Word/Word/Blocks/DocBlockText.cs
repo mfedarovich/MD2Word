@@ -19,7 +19,7 @@ namespace MD2Word.Word.Blocks
 
         public event Action? Closing;
 
-        protected DocBlockText(WordprocessingDocument document, OpenXmlElement parent, Dictionary<FontStyles, string> styles)
+        protected DocBlockText(WordprocessingDocument document, OpenXmlElement parent, IReadOnlyDictionary<FontStyles, string> styles)
         {
             Document = document;
             Parent = parent;
