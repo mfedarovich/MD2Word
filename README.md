@@ -1,6 +1,7 @@
 # MD2Word
 **MD2Word** is a markdown to Microsoft Word converter for .NET. It is based on [markdig](https://github.com/xoofx/markdig) markdown processor.
 It create Word document, based on the predefined template. 
+
 ## Supported Features
 * Headings
 * Number lists
@@ -8,10 +9,11 @@ It create Word document, based on the predefined template.
 * Hyperlinks
 * Emphasis
 * Embedding images from local drive, web (including svg)
-* [PlantUML](http://plantuml.com/) - for UML diagram generation
+* [UML diagrams](http://plantuml.com/) 
 * Code blocks (with syntax highlighting)
 * Thematic break
 * Quotes
+* Tables (without span of cells, and table style is still hardcoded)
 
 ## Requirements
 ### Java
@@ -29,6 +31,8 @@ It can be any *.docx document, where all required styles are defined:
 * Bullet list
 * Hyperlink.
 
+> Nesting levels haven't been supported for lists yet.
+
 You need to ensure that **all used styles** are really **saved in the word document**. For that you need to simply write some dummy text, apply style on to it and save document.
 Then you can cleanup your template.
 
@@ -36,7 +40,9 @@ If table of content is needed, it shall be specified in the template. ([How to a
 
 Following placeholders must be specified:
 * Title
-* Brief document description
+  * MD heading level 1 is interpreted as document title 
+* Brief document description (text with @brief keyword)
+  * Example: "@brief Short description of the document."
 * Body.
 
 Placeholder is specified by [Rich Text Content Control](https://www.thewindowsclub.com/dd-and-change-content-controls-in-word) with appropriate tag (case sensitive):
@@ -47,6 +53,26 @@ Placeholder is specified by [Rich Text Content Control](https://www.thewindowscl
 All placeholders are removed after document generation.
 
 Please see for reference [template example](template_example.docx).
+
+### UML diagrams
+In order to use UML, [PlantUML](http://plantuml.com/) notation shall be used. UML block shall be started with **@startuml** and ended with **@enduml** keywords.
+#### Example:
+```markdown
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+Alice -> Bob: Authentication Request
+Bob --> Alice: Authentication Response
+
+Alice -> Bob: Another authentication Request
+Alice <-- Bob: another authentication Response
+@enduml
+```
+As result UML diagram will be generated in the final document and pasted as a picture:
+
+![](markdown_example.png)
 
 ### Configuration
 All styles from template shall be mapped in the [appsettings.json](MD2Word.App/appsettings.json) like as follow:
