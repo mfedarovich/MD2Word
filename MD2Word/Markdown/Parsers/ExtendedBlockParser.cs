@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Markdig.Parsers;
 using Markdig.Syntax;
 using MD2Word.Markdown.Syntax;
@@ -8,8 +9,20 @@ namespace MD2Word.Markdown.Parsers
     public class ExtendedBlockParser : BlockParser
     {
         private const string Brief = "brief";
-        private const string PlanUmlStart = "startuml";
-        private const string PlantUmlEnd = "enduml";
+        private readonly string[] _planUmlStartArray = {
+            "startuml",
+            "startgantt",
+            "startmindmap",
+            "startwbs",
+            "startyaml"
+        };
+        private readonly string[] _plantUmlEndArray = {
+            "enduml",
+            "endgantt",
+            "endmindmap",
+            "endwbs",
+            "endyaml"
+        };
 
         private Func<BlockProcessor, bool> _checkIfBlockEnded = processor => false;
         public ExtendedBlockParser()
@@ -24,14 +37,14 @@ namespace MD2Word.Markdown.Parsers
                 return BlockState.None;
             }
 
-            if (TryToCreateBlock<BriefBlock>(processor, Brief, p => p.IsBlankLine))
+            if (TryToCreateBlock<BriefBlock>(processor, new []{Brief}, p => p.IsBlankLine))
             {
                 processor.Line.Start += Brief.Length + 1;
                 processor.Line.TrimStart();
                 return BlockState.Continue;
             }
 
-            if (TryToCreateBlock<PlantUmlBlock>(processor, PlanUmlStart, p => p.Line.IndexOf(PlantUmlEnd)>=0)) 
+            if (TryToCreateBlock<PlantUmlBlock>(processor, _planUmlStartArray, p => _plantUmlEndArray.Any(end => p.Line.IndexOf(end)>=0) )) 
                 return BlockState.ContinueDiscard;
       
 
@@ -42,10 +55,20 @@ namespace MD2Word.Markdown.Parsers
             return _checkIfBlockEnded(processor) ? BlockState.BreakDiscard : BlockState.Continue;
         }
         
-        private bool TryToCreateBlock<T>(BlockProcessor processor, string key, Func<BlockProcessor, bool> endBlockCheck) 
+        private bool TryToCreateBlock<T>(BlockProcessor processor, string[] keys, Func<BlockProcessor, bool> endBlockCheck) 
             where T:LeafBlock
         {
-            var position = processor.Line.IndexOf(key, 0, true);
+            string key = string.Empty;
+            int position = -1;
+            foreach (var k in keys)
+            {
+                position = processor.Line.IndexOf(k, 0, true);
+                if (position >= 0)
+                {
+                    key = k;
+                    break;
+                }
+            }
 
             if (position >= 0)
             {
