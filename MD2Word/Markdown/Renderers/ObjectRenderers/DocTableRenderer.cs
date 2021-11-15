@@ -31,13 +31,9 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
                     docCell.ColumnSpan = cell.ColumnSpan;
                     docCell.RowSpan = cell.RowSpan;
                     
-                    if (table.ColumnDefinitions.Count > 0)
+                    if (table.ColumnDefinitions.Count > 0 && i < table.ColumnDefinitions.Count)
                     {
-                        var columnIndex = Math.Min(
-                                Math.Max(0, cell.ColumnIndex), 
-                                table.ColumnDefinitions.Count - 1);
-                        
-                        var alignment = table.ColumnDefinitions[columnIndex].Alignment;
+                        var alignment = table.ColumnDefinitions[i].Alignment;
                         if (alignment.HasValue)
                         {
                             switch (alignment)
