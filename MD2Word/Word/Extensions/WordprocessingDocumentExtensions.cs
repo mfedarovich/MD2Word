@@ -14,7 +14,7 @@ namespace MD2Word.Word.Extensions
             var element = document.MainDocumentPart?.Document.Body?.Descendants<SdtElement>()
                 .FirstOrDefault(sdt => sdt.SdtProperties?.GetFirstChild<Tag>()?.Val == tag);
             if (element == null)
-                throw new ArgumentException($"Documentation body placeholder is not found.");
+                throw new ArgumentException($"Documentation {tag} placeholder is not found.");
 
             return element;
         }
