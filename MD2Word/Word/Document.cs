@@ -39,7 +39,8 @@ namespace MD2Word.Word
         
         public IImage CreateImage()
         {
-            return new DocImage(_doc, CreateOrReuseParagraphIfEmpty());
+            if (_current == null) CreateOrReuseParagraphIfEmpty();
+            return new DocImage(_doc, Current);
         }
 
         public IParagraph CreateTitle()

@@ -18,6 +18,7 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
                 if (!string.IsNullOrEmpty(link.Title))
                 {
                     WriteCaption(inline, link.Title!);
+                    inline.WriteLine();
                 }
                 DrawImage(link);
             }
