@@ -13,6 +13,12 @@ namespace MD2Word.Word
 {
     public class DocImage : IImage
     {
+        private enum ImageType
+        {
+            Svg,
+            Uml,
+            Png
+        }
         private readonly OpenXmlElement _parent;
         private readonly EmbeddedImage _image;
 
@@ -23,25 +29,46 @@ namespace MD2Word.Word
         }
         public void InsertImageFromFile(string fileName)
         {
-            if (Path.GetExtension(fileName) != ".png")
-                throw new FileFormatException("Only png files are supported");
-            
-            InsertPngImage(File.ReadAllBytes(fileName));
+            var extension = Path.GetExtension(fileName);
+            switch (extension)
+            {
+                case ".png": 
+                    InsertPngImage(File.ReadAllBytes(fileName)); 
+                    break;
+                case ".puml": 
+                    InsertUml(File.ReadAllText(fileName));
+                    break;
+                default: throw new FileFormatException("Only png files are supported"); 
+            }
         }
 
         public void InsertImageFromUrl(string url)
         {
             using var webClient = new WebClient();
             var data = webClient.DownloadData(url);
-            if (IsSvg(data))
-                InsertSvgImage(data);
-            else
-                InsertPngImage(data);
+            switch (GetImageType(data))
+            {
+                case ImageType.Svg:
+                    InsertSvgImage(data);
+                    break;
+                case ImageType.Uml:
+                    InsertUml(data);
+                    break;
+                case ImageType.Png:
+                    InsertPngImage(data);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
-        private bool IsSvg(byte[] data)
+        private static ImageType GetImageType(byte[] data)
         {
-            return Encoding.UTF8.GetString(data, 0, Math.Min(10, data.Length)).Contains("svg");
+            var body = Encoding.UTF8.GetString(data, 0, Math.Min(10, data.Length));
+            if (body.Contains("svg")) return ImageType.Svg;
+            return body.Contains("@start") ? 
+                ImageType.Uml : 
+                ImageType.Png;
         }
 
         private void InsertSvgImage(byte[] data)
@@ -54,6 +81,12 @@ namespace MD2Word.Word
             InsertPngImage(saveStream.ToArray());
         }
 
+        private void InsertUml(byte[] data)
+        {
+            using var memoryStream = new MemoryStream(data);
+            using var reader = new StreamReader(memoryStream);
+            InsertUml(reader.ReadToEnd());
+        }
         public void InsertUml(string umlScript)
         {
             var factory = new RendererFactory();

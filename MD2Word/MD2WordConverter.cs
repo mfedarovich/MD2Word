@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using DocumentFormat.OpenXml.Packaging;
 using MD2Word.Markdown;
@@ -13,6 +14,7 @@ namespace MD2Word
         private readonly IReadOnlyDictionary<FontStyles, string> _styles;
         public string WordTemplateFile { get; }
         public string MarkdownFile { get; }
+        public string CurrentDirectory => Path.GetDirectoryName(MarkdownFile)!;
 
         public string? OutputFileName { get; set; }
         public string? OutputDirectory { get; set; }
@@ -26,6 +28,7 @@ namespace MD2Word
 
         public void Convert()
         {
+            Directory.SetCurrentDirectory(CurrentDirectory);
             using var doc = OpenDocument();
 
             var pipelineBuilder = new DocMarkdownPipelineBuilder();
