@@ -52,7 +52,7 @@ Placeholder is specified by [Rich Text Content Control](https://www.thewindowscl
 
 All placeholders are removed after document generation.
 
-Please see for reference [template example](template_example.docx).
+Please see for reference [template example](help/template_example.docx).
 
 ### UML diagrams
 In order to use UML, [PlantUML](http://plantuml.com/) notation shall be used. UML block shall be started with **@startuml** and ended with **@enduml** keywords.
@@ -72,7 +72,7 @@ Alice <-- Bob: another authentication Response
 ```
 As result UML diagram will be generated in the final document and pasted as a picture:
 
-![](markdown_example.png)
+![](help/markdown_example.png)
 
 ### Configuration
 All styles from template shall be mapped in the [appsettings.json](MD2Word.App/appsettings.json) like as follow:
