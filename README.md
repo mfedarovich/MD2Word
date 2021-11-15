@@ -72,7 +72,7 @@ Alice <-- Bob: another authentication Response
 ```
 As result UML diagram will be generated in the final document and pasted as a picture:
 
-![](./markdown_example.png)
+![](markdown_example.png)
 
 ### Configuration
 All styles from template shall be mapped in the [appsettings.json](MD2Word.App/appsettings.json) like as follow:
