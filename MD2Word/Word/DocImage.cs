@@ -38,7 +38,10 @@ namespace MD2Word.Word
                 case ".puml": 
                     InsertUml(File.ReadAllText(fileName));
                     break;
-                default: throw new FileFormatException("Only png files are supported"); 
+                case ".svg":
+                    InsertSvgImage(File.ReadAllBytes(fileName));
+                    break;
+                default: throw new FileFormatException("Only png/puml files are supported"); 
             }
         }
 
@@ -75,6 +78,9 @@ namespace MD2Word.Word
         {
             using var loadStream = new MemoryStream(data);
             var svgDocument = SvgDocument.Open<SvgDocument>(loadStream);
+            if (svgDocument == null)
+                return;
+            
             var bitmap = svgDocument.Draw();
             using var saveStream = new MemoryStream();
             bitmap.Save(saveStream, ImageFormat.Png);
