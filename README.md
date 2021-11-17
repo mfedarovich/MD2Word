@@ -10,6 +10,7 @@ It create Word document, based on the predefined template.
 * Emphasis
 * Embedding images from local drive, web (including svg)
 * [UML diagrams](http://plantuml.com/) 
+* draw.io diagrams
 * Code blocks (with syntax highlighting)
 * Thematic break
 * Quotes
@@ -53,6 +54,19 @@ Placeholder is specified by [Rich Text Content Control](https://www.thewindowscl
 All placeholders are removed after document generation.
 
 Please see for reference [template example](help/template_example.docx).
+
+### Draw.io diagrams
+In order to use it, the draw.io desktop has to be installed and path to the
+draw.io.exe is specified in the [appsettings.json](MD2Word.App/appsettings.json).
+```json
+{
+    "DrawIoPath" : "C:\\Program Files\\draw.io\\draw.io.exe"
+}
+```
+**Example**
+```markdown
+![](diagram.drawio "DrawIO")
+```
 
 ### UML diagrams
 In order to use UML, [PlantUML](http://plantuml.com/) notation shall be used. UML block shall be started with **@startuml** and ended with **@enduml** keywords.

@@ -20,7 +20,7 @@ namespace MD2Word.Word
             public void WriteHyperlink(string url){}
         }
         private readonly WordprocessingDocument _doc;
-        private readonly IReadOnlyDictionary<FontStyles, string> _styles;
+        private readonly Settings _settings;
         private OpenXmlElement? _current;
  
         private OpenXmlElement Current
@@ -30,17 +30,17 @@ namespace MD2Word.Word
         }
         public IDocumentWriter Writer { get; private set; } 
       
-        public Document(WordprocessingDocument doc, IReadOnlyDictionary<FontStyles, string> styles)
+        public Document(WordprocessingDocument doc, Settings settings)
         {
             _doc = doc;
-            _styles = styles;
+            _settings = settings;
             Writer = new EmptyWriter();
         }
         
         public IImage CreateImage()
         {
             if (_current == null) CreateOrReuseParagraphIfEmpty();
-            return new DocImage(_doc, Current);
+            return new DocImage(_doc, Current, _settings.DrawIoPath);
         }
 
         public IParagraph CreateTitle()
@@ -63,7 +63,7 @@ namespace MD2Word.Word
         public IParagraph CreateParagraph()
         {
             var paragraph = CreateOrReuseParagraphIfEmpty();
-            DocParagraph docParagraph = new(_doc, paragraph, _styles);
+            DocParagraph docParagraph = new(_doc, paragraph, _settings.Styles);
             Writer = docParagraph;
             return docParagraph;
         }
@@ -72,7 +72,7 @@ namespace MD2Word.Word
         {
             if (Current.IsPlaceholder()) throw new FormatException("No paragraph is created before");
             
-            var docInline = new DocInline(_doc, Current, _styles);
+            var docInline = new DocInline(_doc, Current, _settings.Styles);
             Writer = docInline;
             return docInline;
         }
@@ -93,7 +93,7 @@ namespace MD2Word.Word
             var paragraph = titlePlaceholder.InsertAfterSelf(new Paragraph());
             var oldCurrent = _current;
             _current = paragraph;
-            var docParagraph = new DocParagraph(_doc, paragraph, _styles);
+            var docParagraph = new DocParagraph(_doc, paragraph, _settings.Styles);
             docParagraph.Closing += () => _current = oldCurrent;
             Writer = docParagraph;
             return docParagraph;

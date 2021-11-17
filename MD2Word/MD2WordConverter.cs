@@ -11,7 +11,7 @@ namespace MD2Word
 {
     public class Md2WordConverter
     {
-        private readonly IReadOnlyDictionary<FontStyles, string> _styles;
+        private readonly Settings _settings;
         public string WordTemplateFile { get; }
         public string MarkdownFile { get; }
         public string CurrentDirectory => new FileInfo(MarkdownFile).DirectoryName!;
@@ -19,9 +19,9 @@ namespace MD2Word
         public string? OutputFileName { get; set; }
         public string? OutputDirectory { get; set; }
 
-        public Md2WordConverter(string markdownFile, string wordTemplateFile, IReadOnlyDictionary<FontStyles, string> styles)
+        public Md2WordConverter(string markdownFile, string wordTemplateFile, Settings settings)
         {
-            _styles = styles;
+            _settings = settings;
             MarkdownFile = markdownFile;
             WordTemplateFile = wordTemplateFile;
         }
@@ -46,7 +46,7 @@ namespace MD2Word
             var documentFile = PrepareDocument();
             var wordDocument = WordprocessingDocument.Open(documentFile, true);
             wordDocument.SetUpdateFieldsOnOpen();
-            return new Document(wordDocument, _styles);
+            return new Document(wordDocument, _settings);
         }
 
         private string PrepareDocument()

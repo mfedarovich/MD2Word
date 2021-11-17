@@ -17,8 +17,8 @@ namespace MD2Word
         
         private static void RunConversion(Options options)
         {
-            var styles = ReadStyles();
-            var converter = new Md2WordConverter(options.MarkdownFile, options.TemplateFile, styles)
+            var settings = ReadSettings();
+            var converter = new Md2WordConverter(options.MarkdownFile, options.TemplateFile, settings)
             {
                 OutputDirectory = options.OutputDirectory,
                 OutputFileName = options.OutputFile
@@ -27,15 +27,18 @@ namespace MD2Word
             converter.Convert();
         }
 
-        private static IReadOnlyDictionary<FontStyles, string> ReadStyles()
+        private static Settings ReadSettings()
         {
             var builder = new ConfigurationBuilder()
                 .AddJsonFile($"appsettings.json", false, false);
-           
             var config = builder.Build();
-            return config.GetSection("Styles")
-                .GetChildren()
-                .ToDictionary(c => Enum.Parse<FontStyles>(c.Key), c => c.Value);
+            
+            return new Settings(
+                config.GetSection("DrawIoPath").Value,
+                config.GetSection("Styles")
+                        .GetChildren()
+                        .ToDictionary(c => Enum.Parse<FontStyles>(c.Key), c => c.Value)
+                );
         }
     }
 }
