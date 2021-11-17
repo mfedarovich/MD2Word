@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Net;
@@ -20,11 +21,13 @@ namespace MD2Word.Word
             Png
         }
         private readonly OpenXmlElement _parent;
+        private readonly string _drawIoPath;
         private readonly EmbeddedImage _image;
 
-        public DocImage(WordprocessingDocument doc, OpenXmlElement parent)
+        public DocImage(WordprocessingDocument doc, OpenXmlElement parent, string drawIoPath)
         {
             _parent = parent;
+            _drawIoPath = drawIoPath;
             _image = new EmbeddedImage(doc, 500);
         }
         public void InsertImageFromFile(string fileName)
@@ -41,7 +44,29 @@ namespace MD2Word.Word
                 case ".svg":
                     InsertSvgImage(File.ReadAllBytes(fileName));
                     break;
+                case ".drawio":
+                    InsertDrawIo(fileName);
+                    break;
                 default: throw new FileFormatException("Only png/puml files are supported"); 
+            }
+        }
+
+        private void InsertDrawIo(string diagramFile)
+        {
+            var drawIoExe = new FileInfo(_drawIoPath);
+            if (!drawIoExe.Exists)
+                return;
+            
+            var fileInfo = new FileInfo(diagramFile);
+            var path = fileInfo.DirectoryName;
+            var imageFile = Path.Combine(path!, fileInfo.Name + ".png");
+            Process.Start(_drawIoPath, @$"-x -f png -o {imageFile} {fileInfo.FullName}");
+
+            var imageFileInfo = new FileInfo(imageFile);
+            if (imageFileInfo.Exists)
+            {
+                InsertPngImage(File.ReadAllBytes(imageFile));
+                File.Delete(imageFile);
             }
         }
 
