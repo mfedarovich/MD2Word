@@ -14,7 +14,7 @@ namespace MD2Word
         private readonly IReadOnlyDictionary<FontStyles, string> _styles;
         public string WordTemplateFile { get; }
         public string MarkdownFile { get; }
-        public string CurrentDirectory => Path.GetDirectoryName(MarkdownFile)!;
+        public string CurrentDirectory => new FileInfo(MarkdownFile).DirectoryName!;
 
         public string? OutputFileName { get; set; }
         public string? OutputDirectory { get; set; }
