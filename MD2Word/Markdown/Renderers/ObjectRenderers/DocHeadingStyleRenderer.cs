@@ -23,6 +23,9 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
                 paragraph.SetStyle(FontStyles.Heading, obj.Level - 1);
                 
                 renderer.WriteLeafInline(obj);
+                
+                // start new paragraph with normal text
+                using var normal = Document.CreateParagraph();
             }
         }
     }

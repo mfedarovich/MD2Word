@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using System.Text;
 using Markdig.Syntax.Inlines;
 
 namespace MD2Word.Markdown.Renderers.InlineRenderers
