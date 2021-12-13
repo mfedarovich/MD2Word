@@ -7,17 +7,26 @@ namespace MD2Word.Word.Blocks
 {
     public class DocParagraph : DocBlockText, IParagraph
     {
+        private readonly DocList _docList;
         private Paragraph Paragraph => (Paragraph)Parent;
         
-        public DocParagraph(WordprocessingDocument document, Paragraph paragraph, IReadOnlyDictionary<FontStyles, string> styles) : 
+        public DocParagraph(WordprocessingDocument document, Paragraph paragraph, IReadOnlyDictionary<FontStyles, string> styles, DocList docList) : 
             base(document, paragraph, styles)
         {
+            _docList = docList;
         }
         
         public override void SetStyle(FontStyles style, int level)
         {
             base.SetStyle(style, level);
-            Paragraph.ApplyStyleId(Document.FindStyleIdByName(Style.Name));
+            if (style is FontStyles.BulletList or FontStyles.NumberList)
+            {
+                _docList.ApplyStyle(Paragraph, style, level);
+            }
+            else
+            {
+                Paragraph.ApplyStyleId(Document.FindStyleIdByName(Style.Name));
+            }
         }
 
         public void CreateHorizontalRule()

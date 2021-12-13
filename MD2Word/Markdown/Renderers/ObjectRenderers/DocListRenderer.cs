@@ -1,4 +1,5 @@
-﻿using Markdig.Syntax;
+﻿using System.Linq;
+using Markdig.Syntax;
 
 namespace MD2Word.Markdown.Renderers.ObjectRenderers
 {
@@ -10,31 +11,21 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
         }
         protected override void Write(DocRenderer renderer, ListBlock listBlock)
         {
-            if (listBlock.IsOrdered)
+            var fonStyle = listBlock.IsOrdered ? FontStyles.NumberList : FontStyles.BulletList;
+            foreach (var item in listBlock.Cast<ListItemBlock>())
             {
-                for (var i = 0; i < listBlock.Count; i++)
-                {
-                    var item = listBlock[i];
-                    var listItem = (ListItemBlock) item;
-                    using var paragraph = Document.CreateParagraph();
-                    paragraph.SetStyle(FontStyles.NumberList);
-                    renderer.WriteChildren(listItem);
-                }
+                using var paragraph = Document.CreateParagraph();
+                paragraph.SetStyle(fonStyle, GetLevel(item.TriviaBefore.ToString()));
+                renderer.WriteChildren(item);
             }
-            else
-            {
-                for (var i = 0; i < listBlock.Count; i++)
-                {
-                    var item = listBlock[i];
-                    var listItem = (ListItemBlock) item;
-                    if (listItem.Count != 0)
-                    {
-                        using var paragraph = Document.CreateParagraph();
-                        paragraph.SetStyle(FontStyles.BulletList);
-                        renderer.WriteChildren(listItem);
-                    }
-                }
-            }
+        }
+
+        private static int GetLevel(string triviaBefore)
+        {
+            var count = triviaBefore.Count(x => x == '\t');
+            if (count == 0)
+                count = triviaBefore.Count(x => x == ' ') / 4;
+            return count;
         }
     }
 }

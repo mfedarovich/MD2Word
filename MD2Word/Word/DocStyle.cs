@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using MD2Word.Word.Extensions;
 
 namespace MD2Word.Word
 {
@@ -16,18 +17,8 @@ namespace MD2Word.Word
         public FontStyles Style { get; set; } = FontStyles.BodyText;
         public int Level { get; set; } = 0;
 
-        public string Name
-        {
-            get
-            {
-                if (Level == 0)
-                    return _styles[Style];
-                
-                var maxLevel = Style.GetType().GetCustomAttribute<NesstingStyleAttribute>()?.MaxLevel ?? int.MaxValue;
-                return string.Format(_styles[Style], Math.Min(Level, maxLevel));
-            }
-        }
-        
+        public string Name => Level == 0 ? _styles[Style] : string.Format(_styles[Style], Math.Min(Level, Style.GetMaxLevel()));
+
         public bool Bold { get; set; }
         public bool Italic { get; set; }
         public string? Foreground { get; set; }

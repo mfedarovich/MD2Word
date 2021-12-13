@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
@@ -22,6 +21,7 @@ namespace MD2Word.Word
         private readonly WordprocessingDocument _doc;
         private readonly Settings _settings;
         private OpenXmlElement? _current;
+        private readonly DocList _docList;
  
         private OpenXmlElement Current
         {
@@ -35,6 +35,7 @@ namespace MD2Word.Word
             _doc = doc;
             _settings = settings;
             Writer = new EmptyWriter();
+            _docList = new DocList(doc);
         }
         
         public IImage CreateImage()
@@ -63,7 +64,7 @@ namespace MD2Word.Word
         public IParagraph CreateParagraph()
         {
             var paragraph = CreateOrReuseParagraphIfEmpty();
-            DocParagraph docParagraph = new(_doc, paragraph, _settings.Styles);
+            DocParagraph docParagraph = new(_doc, paragraph, _settings.Styles, _docList);
             Writer = docParagraph;
             return docParagraph;
         }
@@ -93,7 +94,7 @@ namespace MD2Word.Word
             var paragraph = titlePlaceholder.InsertAfterSelf(new Paragraph());
             var oldCurrent = _current;
             _current = paragraph;
-            var docParagraph = new DocParagraph(_doc, paragraph, _settings.Styles);
+            var docParagraph = new DocParagraph(_doc, paragraph, _settings.Styles, _docList);
             docParagraph.Closing += () => _current = oldCurrent;
             Writer = docParagraph;
             return docParagraph;
