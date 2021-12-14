@@ -16,6 +16,8 @@ namespace MD2Word.Markdown.Renderers.InlineRenderers
             {
                 renderer.Write(obj.ContentWithTrivia);
             }
+
+            using var resetInlineStyle = Document.CreateInline();
         }
     }
 }
