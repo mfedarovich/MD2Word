@@ -60,8 +60,8 @@ namespace MD2Word.Word
             var fileInfo = new FileInfo(diagramFile);
             var path = fileInfo.DirectoryName;
             var imageFile = Path.Combine(path!, fileInfo.Name + ".png");
-            Process.Start(_drawIoPath, @$"-x -f png -o {imageFile} {fileInfo.FullName}");
-
+            var process = Process.Start(_drawIoPath, @$"-x -f png -o {imageFile} {fileInfo.FullName}");
+            process?.WaitForExit();
             var imageFileInfo = new FileInfo(imageFile);
             if (imageFileInfo.Exists)
             {
