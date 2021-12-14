@@ -11,6 +11,9 @@ namespace MD2Word.Markdown.Renderers.ObjectRenderers
 
         protected override void Write(DocRenderer renderer, PlantUmlBlock obj)
         {
+            using var inline = Document.CreateInline();
+            inline.WriteLine();
+
             var sb = new StringBuilder();
             foreach (var line in obj.Lines)
             {
